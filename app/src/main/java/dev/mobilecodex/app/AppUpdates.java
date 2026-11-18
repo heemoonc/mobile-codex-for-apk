@@ -20,6 +20,7 @@ import static dev.mobilecodex.app.core.Json.*;
 
 /** One app-owned operation at a time; network and APK hashing never occupy the model's work queue. */
 final class AppUpdates {
+    private static final String DEFAULT_REPOSITORY="heemoonc/mobile-codex-for-apk";
     interface InstallResult { void complete(File apk, Exception error); }
     interface ReleaseSource { JSONArray read(String repository) throws Exception; }
     private final Context context;
@@ -39,6 +40,13 @@ final class AppUpdates {
     }
     AppUpdates(Context context, Consumer<JSONObject> listener, ReleaseSource releases) {
         this.context=context.getApplicationContext();this.listener=listener;prefs=context.getSharedPreferences("app-updates",0);directory=new File(context.getCacheDir(),"app-updates");
+        if(!prefs.getBoolean("fork-default-v1",false)) {
+            String saved=prefs.getString("repository",DEFAULT_REPOSITORY);
+            SharedPreferences.Editor migration=prefs.edit().putBoolean("fork-default-v1",true);
+            if(saved==null || saved.isBlank() || saved.equalsIgnoreCase("nokryong/mobile-codex"))
+                migration.putString("repository",DEFAULT_REPOSITORY).remove("downloaded");
+            migration.apply();
+        }
         this.releases=releases!=null?releases:repo->new JSONArray(new String(readSmall("https://api.github.com/repos/"+repo+"/releases?per_page=20"),StandardCharsets.UTF_8));
         File[] partials=directory.listFiles((dir,name)->name.endsWith(".part"));
         if(partials!=null && partials.length>0){for(File partial:partials)partial.delete();message=t("이전 다운로드가 중단됐습니다. 업데이트를 다시 확인해 주세요.");}
@@ -54,7 +62,7 @@ final class AppUpdates {
         } catch(Exception ignored){candidate=null;ready=false;}
     }
     private PackageInfo installed() throws PackageManager.NameNotFoundException { return context.getPackageManager().getPackageInfo(context.getPackageName(),PackageManager.GET_SIGNING_CERTIFICATES); }
-    private String repository(){return prefs.getString("repository","nokryong/mobile-codex");}
+    private String repository(){return prefs.getString("repository",DEFAULT_REPOSITORY);}
     private File apk(){return new File(directory,candidate.optString("sha256")+".apk");}
     synchronized JSONObject snapshot() {
         String version="";long code=0;try{PackageInfo current=installed();version=current.versionName;code=current.getLongVersionCode();}catch(Exception ignored){}
@@ -143,7 +151,7 @@ final class AppUpdates {
             HttpURLConnection request=(HttpURLConnection)url.openConnection();connection=request;request.setInstanceFollowRedirects(false);request.setConnectTimeout(15000);request.setReadTimeout(30000);request.setRequestProperty("User-Agent","Mobile-Codex-Android-Updater");request.setRequestProperty("Accept",url.getHost().equals("api.github.com")?"application/vnd.github+json":"application/octet-stream");
             int code=request.getResponseCode();
             if(code>=300&&code<400){String location=request.getHeaderField("Location");request.disconnect();if(location==null)throw new IOException(t("잘못된 다운로드 이동 응답입니다."));url=new URL(url,location);continue;}
-            if(code!=200){request.disconnect();throw new IOException(code==403||code==429?t("GitHub 조회 한도에 도달했거나 접근이 거부됐습니다. 잠시 뒤 다시 시도해 주세요."):code==404?t("공개 저장소 또는 릴리스 파일을 찾지 못했습니다."):t("업데이트 서버 오류 (")+code+")");}
+            if(code!=200){request.disconnect();throw new IOException(code==403||code==429?t("GitHub 조회 한도에 도달했거나 접근이 거부됐습니다. 잠시 뒤 다시 시도해 주세요."):code==404?t("공개 저장소 또는 릴리스 파일을 찾지 못했습니다. 저장소가 비공개라면 최신 릴리스 열기에서 권한이 있는 GitHub 계정으로 확인하십시오."):t("업데이트 서버 오류 (")+code+")");}
             return request;
         }
         throw new IOException(t("다운로드 주소 이동이 너무 많습니다."));

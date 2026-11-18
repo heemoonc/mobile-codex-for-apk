@@ -8,6 +8,7 @@ import org.junit.*;
 import org.junit.runner.RunWith;
 import org.robolectric.*;
 import org.robolectric.annotation.Config;
+import org.robolectric.annotation.ConscryptMode;
 import org.robolectric.shadow.api.Shadow;
 import java.io.*;
 import java.net.URL;
@@ -18,6 +19,7 @@ import static org.junit.Assert.*;
 import static dev.mobilecodex.app.core.Json.*;
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk=29,application=Application.class)
+@ConscryptMode(ConscryptMode.Mode.OFF)
 public class AppUpdatesTest {
     private Context context;private AppUpdates updates;private File apk;private JSONObject candidate;
     private SigningInfo signing(String certificate){SigningInfo info=Shadow.newInstanceOf(SigningInfo.class);Shadows.shadowOf(info).setSignatures(new Signature[]{new Signature(certificate)});return info;}
@@ -28,7 +30,29 @@ public class AppUpdatesTest {
         byte[] bytes={1,2,3,4};StringBuilder hash=new StringBuilder();for(byte b:MessageDigest.getInstance("SHA-256").digest(bytes))hash.append(String.format("%02x",b&255));
         File dir=new File(context.getCacheDir(),"app-updates");dir.mkdirs();apk=new File(dir,hash+".apk");Files.write(apk.toPath(),bytes);
         candidate=obj("versionName","0.1.12-alpha","size",bytes.length,"sha256",hash.toString(),"repository","nokryong/mobile-codex");
-        updates=new AppUpdates(context,s->{});set("candidate",candidate);set("ready",true);Shadows.shadowOf(context.getPackageManager()).setPackageArchiveInfo(apk.getAbsolutePath(),archive("010203"));
+        updates=new AppUpdates(context,s->{});updates.configure("nokryong/mobile-codex",true);set("candidate",candidate);set("ready",true);Shadows.shadowOf(context.getPackageManager()).setPackageArchiveInfo(apk.getAbsolutePath(),archive("010203"));
+    }
+    @Test public void freshInstallUsesForkRepositoryWithoutFetching() throws Exception {
+        updates.shutdown();context.getSharedPreferences("app-updates",0).edit().clear().commit();
+        updates=new AppUpdates(context,s->{},repo->{throw new AssertionError("no implicit network");});
+        assertEquals("heemoonc/mobile-codex-for-apk",updates.snapshot().getString("repository"));
+        assertFalse(updates.snapshot().getBoolean("busy"));
+    }
+    @Test public void inheritedUpstreamSourceMigratesOnceAndDropsCachedSelection() throws Exception {
+        updates.shutdown();var prefs=context.getSharedPreferences("app-updates",0);
+        prefs.edit().clear().putString("repository","nokryong/mobile-codex").putString("downloaded",candidate.toString()).commit();
+        updates=new AppUpdates(context,s->{});
+        assertEquals("heemoonc/mobile-codex-for-apk",updates.snapshot().getString("repository"));
+        assertFalse(updates.snapshot().getBoolean("ready"));assertFalse(prefs.contains("downloaded"));
+        updates.configure("nokryong/mobile-codex",false);updates.shutdown();updates=new AppUpdates(context,s->{});
+        assertEquals("nokryong/mobile-codex",updates.snapshot().getString("repository"));
+        assertFalse(updates.snapshot().getBoolean("prereleases"));
+    }
+    @Test public void customSourceSurvivesTheOneTimeMigration() throws Exception {
+        updates.shutdown();context.getSharedPreferences("app-updates",0).edit().clear().putString("repository","custom/repo").putBoolean("prereleases",false).commit();
+        updates=new AppUpdates(context,s->{});
+        assertEquals("custom/repo",updates.snapshot().getString("repository"));
+        assertFalse(updates.snapshot().getBoolean("prereleases"));
     }
     @After public void cleanup(){updates.shutdown();}
     private File prepare()throws Exception{CompletableFuture<File> result=new CompletableFuture<>();updates.prepareInstall(candidate.getString("sha256"),(file,error)->{if(error==null)result.complete(file);else result.completeExceptionally(error);});return result.get(5,TimeUnit.SECONDS);}

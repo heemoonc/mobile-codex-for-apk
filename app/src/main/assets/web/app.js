@@ -665,6 +665,7 @@
     if (value.versionName) { $('update-current').textContent = t('현재 ') + value.versionName + t(' · 빌드 ') + value.versionCode; $('app-version').textContent = value.versionName; }
     if (!updateSourceDirty) { if (value.repository) $('update-repository').value = value.repository; if (typeof value.prereleases === 'boolean') $('update-prereleases').checked = value.prereleases; }
     $('update-repository').disabled = busy; $('update-prereleases').disabled = busy; $('update-check').disabled = busy;
+    $('update-default').disabled = busy;
     C.busyIndicator($('update-status'),busy);
     $('update-status').textContent = value.message || t('업데이트 확인을 누르면 공개 릴리스를 조회합니다.');
     $('update-cancel').hidden = !value.canCancel; $('update-cancel').disabled = updateRequestPending;
@@ -680,11 +681,20 @@
     $('update-install').hidden = !value.ready; $('update-install').disabled = busy || updateSourceDirty || !value.canInstall || state.busy;
     $('update-clear').hidden = !value.ready && !value.hasDownload; $('update-clear').disabled = busy;
   }
+  async function openUpdatePage(releases = false) {
+    const repo = updateState.repository || 'heemoonc/mobile-codex-for-apk';
+    if (!/^[A-Za-z0-9][A-Za-z0-9-]{0,38}\/[A-Za-z0-9_.-]{1,100}$/.test(repo) || /\/\.\.?$/.test(repo)) throw new Error(t('GitHub 저장소를 소유자/저장소 형식으로 입력해 주세요.'));
+    await call('ui.externalBrowser', {url:'https://github.com/' + repo + (releases ? '/releases/latest' : '')});
+  }
   async function loadUpdates() { try { drawUpdates(await call('updates.state')); } catch(error) { $('update-status').textContent = error.message; } }
   async function updateAction(action) {
     if (updateRequestPending) return;
     updateRequestPending = true; drawUpdates(updateState);
     try {
+      if (action === 'default') {
+        const result = await call('updates.configure', {repository:'heemoonc/mobile-codex-for-apk', prereleases:$('update-prereleases').checked});
+        updateSourceDirty = false; drawUpdates(result); return;
+      }
       if (action === 'check' && updateSourceDirty) {
         const result = await call('updates.configure', {repository:$('update-repository').value.trim(), prereleases:$('update-prereleases').checked});
         updateSourceDirty = false; drawUpdates(result);
@@ -2504,7 +2514,10 @@
   on('account-add', () => startLogin(true));
   on('restart', async () => { await call('runtime.stop'); await call('runtime.start'); }); on('engine-stop', () => call('runtime.stop')); on('logout', async () => { if (!C.isLoggedIn(state.account)) return startLogin(false); if (!confirm(t('현재 계정을 이 기기에서 로그아웃할까요?'))) return; await call('auth.logout'); });
   on('usage-refresh', loadUsage);
-  ['check','download','cancel','clear','permission','install'].forEach(action => on('update-' + action, () => updateAction(action)));
+  on('show-app-updates', () => { close('tool-menu-dialog'); selectSettingsTab('updates'); show('settings-dialog'); sidebar(false); return loadUpdates(); });
+  on('update-github', () => openUpdatePage(false));
+  on('update-releases', () => openUpdatePage(true));
+  ['default','check','download','cancel','clear','permission','install'].forEach(action => on('update-' + action, () => updateAction(action)));
   $('update-repository').addEventListener('input', () => { updateSourceDirty = true; drawUpdates(updateState); });
   $('update-prereleases').addEventListener('change', () => { updateSourceDirty = true; drawUpdates(updateState); });
   ensureTextSizeSettings();

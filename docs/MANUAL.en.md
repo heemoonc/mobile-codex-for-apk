@@ -2,13 +2,21 @@
 
 [Overview](../README.md) · [한국어 매뉴얼](MANUAL.ko.md) · [Latest APK](https://github.com/heemoonc/mobile-codex-for-apk/releases/latest)
 
-This guide describes **0.3.9-apk-dev42**. Creating projects, preparing tools and building do not require ChatGPT or GitHub. AI conversations require an eligible account and internet access. Korean labels below match the installed UI; translated labels depend on language settings.
+This guide describes **0.3.9-apk-dev43**. Creating projects, preparing tools and building do not require ChatGPT or GitHub. AI conversations require an eligible account and internet access. Korean labels below match the installed UI; translated labels depend on language settings.
 
 ## 1. Install and update
 
 Download `Mobile-Codex-for-APK-*.apk` from release Assets, not the automatic Source code archives. Update over the existing installation using the same package and signing key. Back up first: uninstalling may remove internal projects, tools and settings.
 
 Application ID: `dev.mobilecodex.apk`. The original Mobile Codex is a separate app; accounts, Linux, tools and credentials are not shared automatically. The Accessibility entry is **Mobile Codex APK · 휴대폰 제어**. Confirm installation and permissions yourself in Android.
+
+### Update inside the app
+
+Open **Tools → App updates** or **Settings → Updates**. The default distribution repository is `heemoonc/mobile-codex-for-apk`. The inherited upstream source is migrated once; other custom sources are preserved. Use **Restore default repository** to reset it explicitly.
+
+Choose **Check for updates → Download → Install update**. The app checks download size, SHA-256, package, version and signing identity; confirm installation in Android yourself. Opening the screen does not check, download or install automatically. Enable **Include prereleases** for the current development versions.
+
+**Open GitHub repository / Open latest release** opens the saved distribution source in your browser. Public release checks do not need GitHub sign-in. Private repositories are unavailable to the public updater: sign in with an authorized account in your browser and download the release APK there. This is separate from authentication for your project Git operations.
 
 ## When to use phone control
 

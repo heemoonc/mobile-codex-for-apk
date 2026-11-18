@@ -1,5 +1,11 @@
 /* UI messages only; user/model/file content is never translated. */
 window.MobileCodexEnglish = {
+  "이 앱의 공개 ARM64 릴리스를 조회합니다. GitHub 로그인은 필요하지 않습니다. 비공개 저장소는 브라우저에서 권한이 있는 계정으로 확인하십시오.": "Check public ARM64 releases for this app without GitHub sign-in. For private repositories, open the browser and sign in with an account that has access.",
+  "기본 저장소로 복원": "Restore default repository",
+  "GitHub 저장소 열기": "Open GitHub repository",
+  "최신 릴리스 열기": "Open latest release",
+  "공개 저장소 또는 릴리스 파일을 찾지 못했습니다. 저장소가 비공개라면 최신 릴리스 열기에서 권한이 있는 GitHub 계정으로 확인하십시오.": "Public repository or release asset not found. If the repository is private, use Open latest release and sign in to GitHub with an account that has access.",
+
   "Android 개발 시작": "Start Android development",
   "프로젝트는 앱 내부 공간에서 작업하고, Linux에서 같은 파일을 빌드합니다. GitHub와 ChatGPT 계정 연결 없이도 프로젝트 생성과 빌드를 시작할 수 있습니다.": "Projects use internal app storage, and Linux builds the same files. You can create and build projects without connecting GitHub or a ChatGPT account.",
   "프로젝트 준비": "Prepare a project",

@@ -1603,5 +1603,10 @@
   "포크 개발·관리: heemoonc": "Fork development and maintenance: heemoonc",
   "저장소: github.com/heemoonc/mobile-codex-for-apk": "Repository: github.com/heemoonc/mobile-codex-for-apk",
   "원본: Mobile Codex · 제작: nokryong": "Original: Mobile Codex · Created by nokryong",
-  "OpenAI 공식 앱이 아닌 독립 클라이언트입니다.": "An independent client, not an official OpenAI app."
+  "OpenAI 공식 앱이 아닌 독립 클라이언트입니다.": "An independent client, not an official OpenAI app.",
+  "이 앱의 공개 ARM64 릴리스를 조회합니다. GitHub 로그인은 필요하지 않습니다. 비공개 저장소는 브라우저에서 권한이 있는 계정으로 확인하십시오.": "Check public ARM64 releases for this app without GitHub sign-in. For private repositories, open the browser and sign in with an account that has access.",
+  "기본 저장소로 복원": "Restore default repository",
+  "GitHub 저장소 열기": "Open GitHub repository",
+  "최신 릴리스 열기": "Open latest release",
+  "공개 저장소 또는 릴리스 파일을 찾지 못했습니다. 저장소가 비공개라면 최신 릴리스 열기에서 권한이 있는 GitHub 계정으로 확인하십시오.": "Public repository or release asset not found. If the repository is private, use Open latest release and sign in to GitHub with an account that has access."
 }

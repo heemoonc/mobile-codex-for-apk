@@ -1856,3 +1856,28 @@ test('Android start opens the existing template form without creating or running
 test('fresh installation defaults characters off and preserves an explicit opt-in',async()=>{
  for(const enabled of [false,true]){const {w,calls}=setup({},enabled?{drafts:{'chat-icons':'on'}}:{freshInstall:true});await tick();const d=w.document;assert.equal(d.getElementById('chat-icons-toggle').checked,enabled);assert.equal(d.querySelector('.welcome-mark').hidden,!enabled);assert.equal(calls.filter(c=>c.action==='chat.icons.set').at(-1).args.enabled,enabled);}
 });
+
+
+test('update shortcuts open saved sources without checking or downloading',async()=>{
+ const {w,calls}=setup({'updates.state':()=>({repository:'heemoonc/mobile-codex-for-apk',status:'idle',revision:1})});await tick();const d=w.document;
+ d.getElementById('show-app-updates').click();await tick();
+ assert.equal(d.getElementById('settings-dialog').open,true);
+ assert.equal(d.querySelector('[data-settings-tab="updates"]').classList.contains('active'),true);
+ d.getElementById('update-github').click();d.getElementById('update-releases').click();await tick();
+ assert.deepEqual(calls.filter(c=>c.action==='ui.externalBrowser').map(c=>c.args.url),['https://github.com/heemoonc/mobile-codex-for-apk','https://github.com/heemoonc/mobile-codex-for-apk/releases/latest']);
+ assert.equal(calls.filter(c=>['updates.check','updates.download','updates.install'].includes(c.action)).length,0);
+});
+test('restore default update source is explicit and does not change prerelease choice or fetch releases',async()=>{
+ const {w,calls}=setup({'updates.state':()=>({repository:'custom/repo',prereleases:false,status:'idle',revision:1}),'updates.configure':()=>({repository:'heemoonc/mobile-codex-for-apk',prereleases:false,status:'idle',revision:2})});await tick();const d=w.document;
+ d.getElementById('update-default').click();await tick();
+ assert.deepEqual(calls.find(c=>c.action==='updates.configure').args,{repository:'heemoonc/mobile-codex-for-apk',prereleases:false});
+ assert.equal(d.getElementById('update-repository').value,'heemoonc/mobile-codex-for-apk');
+ assert.equal(calls.filter(c=>['updates.check','updates.download'].includes(c.action)).length,0);
+});
+test('update browser links use the saved source and reject malformed repository values',async()=>{
+ const {w,calls}=setup({'updates.state':()=>({repository:'custom/repo',status:'idle',revision:1})});await tick();const d=w.document;
+ d.getElementById('update-repository').value='unsaved/repo';d.getElementById('update-repository').dispatchEvent(new w.Event('input'));
+ d.getElementById('update-github').click();await tick();assert.equal(calls.find(c=>c.action==='ui.externalBrowser').args.url,'https://github.com/custom/repo');
+ w.mobileCodexEvent('updates.changed',{repository:'../bad?token=x',status:'idle',revision:2});
+ d.getElementById('update-releases').click();await tick();assert.equal(calls.filter(c=>c.action==='ui.externalBrowser').length,1);
+});

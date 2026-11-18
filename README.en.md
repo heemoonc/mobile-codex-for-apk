@@ -18,9 +18,9 @@
 
 ---
 
-## Start here · dev42
+## Start here · dev43
 
-[**User manual**](docs/MANUAL.en.md) · [한국어 매뉴얼](docs/MANUAL.ko.md) · [Current release: 0.3.9-apk-dev42](https://github.com/heemoonc/mobile-codex-for-apk/releases/tag/v0.3.9-apk-dev42)
+[**User manual**](docs/MANUAL.en.md) · [한국어 매뉴얼](docs/MANUAL.ko.md) · [Current release: 0.3.9-apk-dev43](https://github.com/heemoonc/mobile-codex-for-apk/releases/tag/v0.3.9-apk-dev43)
 
 **One Android device: prepare tools → create/import a project → implement → verify → export/install APK → optionally save to GitHub.**
 
@@ -34,7 +34,7 @@
 
 Projects created/imported through Android development start use app-private storage; Linux builds the same files through `/workspace`. The original working-folder picker remains available. **ChatGPT and GitHub are not required for project creation, setup or builds.** AI coding needs ChatGPT sign-in; private clones/uploads need separate bundled Git authentication. GitHub is optional.
 
-dev42 adds fork attribution in app information and consistent settings dropdown spacing. Character packs default to off on fresh installations. Development tools use a single download/install action. It includes the Android start hub and explicit Git clone/status/selected-file commit/upload screens. It also includes first-install tool downloads, progress indicators and the development workflow/manual. [Read the complete guide](docs/MANUAL.en.md).
+dev43 fixes the default update repository and adds direct update and GitHub release shortcuts. Character packs default to off on fresh installations. Development tools use a single download/install action. It includes the Android start hub and explicit Git clone/status/selected-file commit/upload screens. It also includes first-install tool downloads, progress indicators and the development workflow/manual. [Read the complete guide](docs/MANUAL.en.md).
 
 ## Overview
 
@@ -76,6 +76,14 @@ Library compatibility depends on Gradle, Kotlin, plugin versions and available d
 | Updates | Install an APK with the same application ID and signing key over the existing app |
 
 To retain app data, update without uninstalling. Builds signed with a different key cannot update an existing installation. Back up important projects before updating. This fork and the original Mobile Codex are separate apps; authentication and internal settings are not automatically shared.
+
+### Update inside the app
+
+Open **Tools → App updates** or **Settings → Updates**. The default distribution repository is `heemoonc/mobile-codex-for-apk`. The inherited upstream source is migrated once; other custom sources are preserved. Use **Restore default repository** to reset it explicitly.
+
+Choose **Check for updates → Download → Install update**. The app checks download size, SHA-256, package, version and signing identity; confirm installation in Android yourself. Opening the screen does not check, download or install automatically. Enable **Include prereleases** for the current development versions.
+
+**Open GitHub repository / Open latest release** opens the saved distribution source in your browser. Public release checks do not need GitHub sign-in. Private repositories are unavailable to the public updater: sign in with an authorized account in your browser and download the release APK there. This is separate from authentication for your project Git operations.
 
 <a id="requirements"></a>
 ## Requirements
