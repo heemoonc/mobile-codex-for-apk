@@ -1,0 +1,24 @@
+plugins { id 'com.android.application'; id 'org.jetbrains.kotlin.android'; id 'org.jetbrains.kotlin.plugin.compose' }
+
+android {
+    namespace 'dev.mobilecodex.sample'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'dev.mobilecodex.sample'
+        minSdk 29
+        targetSdk 35
+        versionCode 1
+        versionName '0.1-sample1'
+    }
+    buildFeatures { compose true }
+    kotlinOptions { jvmTarget = '17' }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+ implementation 'androidx.activity:activity-compose:1.10.1'
+ implementation 'androidx.compose.foundation:foundation:1.8.3'
+}

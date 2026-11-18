@@ -1,0 +1,5 @@
+<resources>
+    <string name="codex_brand" translatable="false">Codex</string>
+    <!-- Components are translated by the existing Texts catalog before formatting. -->
+    <string name="floating_status" translatable="false">%1$s%2$s</string>
+</resources>

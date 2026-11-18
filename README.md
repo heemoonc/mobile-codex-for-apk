@@ -1,0 +1,255 @@
+<div align="center">
+
+<img src="assets/readme/logo.svg" width="112" height="112" alt="Mobile Codex for APK" />
+
+# Mobile Codex for APK
+
+**Android에서 대화하고, 코드를 수정하고, APK를 만드는 개발 작업 공간**<br>
+**An Android workspace for AI-assisted coding and APK development**
+
+[![Android](https://img.shields.io/badge/Android-10%2B-3DDC84?logo=android&logoColor=white)](#requirements)
+![Architecture](https://img.shields.io/badge/ABI-arm64--v8a-orange)
+[![License](https://img.shields.io/badge/License-GPL--3.0--only-blue)](LICENSE)
+
+[**최신 APK 다운로드 · Download APK**](https://github.com/heemoonc/mobile-codex-for-apk/releases/latest) · [모든 버전 · All releases](https://github.com/heemoonc/mobile-codex-for-apk/releases)
+
+[한국어](README.md) | [English](README.en.md)
+
+</div>
+
+---
+
+## 시작 안내 · dev41
+
+[**사용 매뉴얼**](docs/MANUAL.ko.md) · [English manual](docs/MANUAL.en.md) · [현재 릴리스: 0.3.9-apk-dev41](https://github.com/heemoonc/mobile-codex-for-apk/releases/tag/v0.3.9-apk-dev41)
+
+**안드로이드 기기 하나로 도구 준비 → 프로젝트 생성·가져오기 → 구현 → 검증 → APK 저장·설치 → 선택적으로 GitHub 저장까지 진행합니다.**
+
+| 하고 싶은 작업 | 메뉴 |
+|---|---|
+| 최초 개발 환경 준비 | 도구 → Android 개발 환경 설정 → Linux 설치·활성화 → 도구 다운로드·설치 → 실행 확인 |
+| Android 소스 생성·가져오기 | 홈 / 도구 → Android 개발 시작 → 새 프로젝트 / 폴더 / 소스 백업 ZIP / GitHub |
+| 다음 단계와 사용법 확인 | 개발 단계 · 자동 검증 · 매뉴얼 |
+| APK 빌드·내보내기 | APK 만들기 · 저장 → APK 빌드 → 새로고침 → 정보 확인 → APK 저장 |
+| 변경 이력 저장·업로드 | 변경 저장 · GitHub 업로드 → 변경 비교 → 파일 선택 → 커밋 → 별도 업로드 확인 |
+
+Android 개발 시작에서 생성·가져온 프로젝트는 앱 내부에 저장되고 Linux에서 같은 파일을 `/workspace`로 연결해 빌드합니다. 기존 작업 폴더 선택도 유지합니다. **프로젝트 생성·환경 준비·빌드에는 ChatGPT와 GitHub 연결이 필요하지 않습니다.** AI 개발 대화는 ChatGPT 로그인, 비공개 복제·업로드는 별도의 번들 Git 인증이 필요합니다. GitHub는 선택 기능입니다.
+
+dev41은 새 설치에서 캐릭터 팩을 기본으로 끕니다. 개발 도구는 다운로드·설치로 제공합니다. Android 개발 시작과 명시적인 Git 복제·변경 조회·선택 파일 커밋·업로드 화면이 추가됐습니다. 최초 설치용 도구 다운로드, 진행 표시, 개발 단계와 매뉴얼도 제공합니다. [자세한 사용법](docs/MANUAL.ko.md)을 확인하십시오.
+
+## 소개
+
+Mobile Codex for APK는 Android 기기에서 Codex와 함께 프로젝트를 살펴보고, 파일을 수정하고, 명령을 실행하며 Android 앱을 개발하는 독립 클라이언트입니다. [Mobile Codex](https://github.com/nokryong/mobile-codex)를 기반으로, ARM64 기기의 APK 개발 작업을 위해 확장한 포크입니다. OpenAI의 공식 Android 앱은 아닙니다.
+
+채팅 화면에서 작업을 요청하고 프로젝트 폴더를 연결하여 소스 수정부터 빌드 결과 확인까지 이어갈 수 있습니다. Python·Node.js·Git 도구를 포함하며, 필요할 때 별도의 Linux 환경과 Android 빌드 도구를 구성해 사용합니다.
+
+> **배포 상태:** 개발용 빌드입니다. AI 추론과 계정 인증에는 인터넷 연결이 필요합니다. 모델 자체가 기기에서 오프라인으로 실행되는 앱은 아닙니다. 현재 저장소와 다운로드는 비공개이며, 접근 권한이 있는 GitHub 계정으로 로그인해야 합니다.
+
+## 주요 기능
+
+| 기능 | 설명 |
+|---|---|
+| AI 개발 대화 | Codex에 작업 요청, 코드 설명·수정·검토, 프로젝트별 대화 관리 |
+| 프로젝트 및 파일 | 폴더 연결, 파일 탐색·편집, 프로젝트 가져오기·내보내기 |
+| 터미널 및 개발 도구 | 번들 Python·Node.js·npm·pip·Git을 이용한 명령 실행 |
+| Android 앱 개발 | Java·Kotlin·Compose 프로젝트 템플릿, 빌드 도구 설정, APK 빌드·내보내기·설치 흐름 |
+| 선택적 Linux 환경 | PRoot 기반 Arch Linux ARM64 환경에서 Linux 개발 명령 실행 |
+| 휴대폰 제어 | 사용자가 접근성과 제어를 켠 경우 화면 읽기·탭·입력·스크롤·드래그 |
+| 음성 | 음성 입력 및 Live 오디오 기능. 계정·서비스·권한에 따라 제공 범위가 달라집니다. |
+| 화면 꾸미기 | 테마와 캐릭터 팩 설정. 캐릭터 팩을 끄면 캐릭터를 표시하지 않습니다. |
+| 승인 처리 | 지원되는 도구 요청에서 이번 대화 또는 항상 허용 범위 선택 |
+
+라이브러리 지원 여부는 프로젝트의 Gradle·Kotlin·플러그인 버전 및 기기용 바이너리 제공 여부에 따라 달라집니다. 모든 Android 라이브러리나 데스크톱 개발 도구의 호환성을 보장하지 않습니다.
+
+## 최신 버전 다운로드
+
+1. **[최신 릴리스](https://github.com/heemoonc/mobile-codex-for-apk/releases/latest)**를 엽니다.
+2. **Assets**에서 `Mobile-Codex-for-APK-*.apk`를 내려받습니다. GitHub가 자동으로 제공하는 `Source code` 압축 파일은 설치 파일이 아닙니다.
+3. APK를 열고 Android 설치 화면에서 설치 또는 업데이트를 확인합니다.
+4. 필요하면 같은 릴리스의 `SHA256SUMS`로 다운로드 파일의 SHA-256을 비교합니다.
+
+| 구분 | 내용 |
+|---|---|
+| 앱 이름 | Mobile Codex for APK |
+| Android 패키지 ID | `dev.mobilecodex.apk` |
+| 배포 형식 | ARM64 APK, 개발용 빌드 |
+| 앱 아이콘 | 주황색 배경의 코드 기호와 APK 배지 |
+| 업데이트 | 같은 패키지·서명 키로 빌드한 APK를 기존 앱 위에 설치 |
+
+기존 데이터를 유지하려면 앱을 삭제하지 말고 업데이트 설치하십시오. 다른 서명 키로 빌드한 APK는 기존 앱에 업데이트할 수 없습니다. 중요한 프로젝트는 업데이트 전에 별도로 백업하십시오. 원본 Mobile Codex와 이 포크는 별도 앱이며, 로그인과 앱 내부 설정이 자동으로 공유되지 않습니다.
+
+<a id="requirements"></a>
+## 실행 환경
+
+- Android **10 / API 29 이상**, **ARM64 / `arm64-v8a`** 기기.
+- Codex를 사용할 수 있는 계정과 인터넷 연결. 이용 가능한 모델·기능은 계정과 서비스 조건에 따라 달라집니다.
+- 프로젝트, 의존성, 빌드 캐시를 위한 여유 저장 공간. Linux와 Android 도구를 추가하면 저장 공간이 더 필요합니다.
+- 별도의 데스크톱이나 Termux 앱은 필수가 아닙니다. Linux 환경과 Android 빌드 도구는 필요한 경우 별도로 준비합니다.
+
+## 처음 사용하기
+
+### 1. Android 개발 시작과 선택적 로그인
+
+1. 홈의 **Android 개발 시작**에서 프로젝트를 생성하거나 가져옵니다. AI 대화를 사용할 때 계정을 연결합니다.
+2. 프로젝트를 만들거나 기존 프로젝트 폴더를 선택합니다. Android 폴더 접근 화면에서 작업할 폴더를 허용합니다.
+3. 대화에서 작업을 요청합니다. 예: “이 프로젝트 구조를 설명하고 빌드 방법을 확인해 주십시오.”
+4. 파일 변경과 명령 실행 결과를 확인하고, 중요한 변경은 Git으로 기록합니다.
+
+### 2. 개발 도구 확인
+
+1. **설정 → 도구 → 도구 실행 확인**을 실행합니다.
+2. 필요한 경우 Linux 환경과 Android 빌드 도구를 준비합니다. 번들 Python·Node.js·Git만으로 Android SDK 전체가 준비되는 것은 아닙니다.
+3. 새 프로젝트는 Java·Kotlin·Compose 템플릿을 선택하거나 기존 Gradle 프로젝트를 연결하여 시작합니다.
+4. 빌드 결과의 APK를 내보내고 Android 설치 화면에서 직접 설치를 확인합니다.
+
+Android 공유 저장소는 실행 권한·심볼릭 링크를 제한할 수 있습니다. 이런 기능이 필요한 프로젝트는 앱이 제공하는 내부 작업 공간을 사용하십시오. 네이티브 npm/pip 확장이나 외부 도구는 Android 또는 선택한 Linux ARM64 환경에 맞는 바이너리·빌드 환경이 필요합니다.
+
+### 3. 선택 기능 켜기
+
+- **휴대폰 제어:** 설정 → 도구에서 Android 접근성 설정을 연 뒤 사용자가 직접 접근성과 휴대폰 제어를 켭니다. 화면 위 중지 버튼으로 종료할 수 있습니다. 다른 앱의 화면 내용이 AI 서비스로 전달될 수 있으므로 필요한 작업에만 사용하십시오.
+- **음성:** 사용할 때 마이크 권한을 허용합니다.
+- **캐릭터 팩:** 설정에서 원하는 팩을 선택하거나 끕니다. 끈 상태에서는 캐릭터가 표시되지 않습니다.
+- **GitHub:** 연결 도구의 저장소 권한과 터미널의 Git 인증은 별개입니다. 터미널에서 `git push`하려면 해당 실행 환경에 Git 인증을 설정해야 합니다. 토큰·개인 키를 대화나 저장소에 넣지 마십시오.
+
+## Android 개발 도우미
+
+**Android 빌드 → Android 개발 도우미**에서 다음 작업을 수행합니다.
+
+1. **프로젝트 진단:** 선언된 SDK·AGP·Kotlin·Gradle·라이브러리를 읽고 불명확한 값과 호환 조건을 표시합니다.
+2. **라이브러리 또는 SDK 선택:** 변경 전후 파일을 확인한 뒤 **미리본 변경 적용**을 누릅니다. 원본은 앱 내부 백업에 보관하며, 미리보기 이후 파일이 바뀌면 적용을 거부합니다.
+3. **검증 실행:** 빌드·Lint·단위 테스트를 함께 실행하거나, ADB에 연결된 기기의 instrumentation 테스트를 실행합니다. 로그와 중지는 기존 터미널에서 확인합니다.
+4. **OS별 결과:** 검증할 API 번호를 저장하고 각 버전의 미검증·통과·실패·취소·소스 변경 상태를 구분합니다. 로컬 빌드 성공으로 모든 Android 버전이 통과했다고 표시하지 않습니다.
+
+라이브러리 목록은 기존 검사 프로젝트의 **고정 검증 프로필**입니다. 최신 버전 자동 추천이나 전체 Maven 호환성 데이터베이스가 아닙니다. Kotlin 자동 추가는 확인된 `2.2.0` 프로필을 사용하며, 다른 버전·별칭·동적 값·복잡한 다중 모듈 구성은 수동 확인이 필요합니다. SDK·플러그인은 라이브러리 추가 과정에서 자동 업그레이드하지 않습니다.
+
+**외부 테스트:** Linux 환경에 ADB 또는 Google Cloud CLI가 별도로 있어야 합니다. ADB는 사용자가 이미 연결·인증한 기기를 사용합니다. 클라우드는 기존 `gcloud` 로그인, 사용 가능한 Firebase Test Lab 프로젝트·기기 모델이 필요하며 실행 요금이 발생할 수 있습니다. 앱 APK와 테스트 APK 경로는 현재 프로젝트 내부의 상대 경로로 지정합니다. 계정 비밀 정보는 도우미 입력란에 넣지 마십시오.
+
+외부 테스트 계획을 생성해 명령을 복사할 수 있습니다. JSON 보고서를 가져오는 경우 `schema`, `kind`, `status`, `api`, `device`, `fingerprint`, `completedAt` 필드가 필요합니다. 가져온 결과는 외부 보고로 표시하며 앱이 직접 검증한 결과로 승격하지 않습니다. 직접 ADB·클라우드로 선택한 APK의 성공도 APK 검증으로 표시하고 현재 소스에서 빌드됐다는 보증과 구분합니다.
+
+검증 기록에는 소스 지문과 결과 요약을 저장하고 터미널 원문은 저장하지 않습니다. 소스 지문은 생성물·캐시를 제외한 프로젝트 입력을 검사하며, 파일 수·크기·링크 등 안전 상한으로 지문을 만들 수 없어도 검사는 실행하며, 결과는 소스 일치 여부 미확인으로 기록합니다. 일반 APK 빌드 기능은 별도로 사용할 수 있습니다.
+
+## 패키지와 저장소 구성
+
+Android 설치 패키지 ID는 `dev.mobilecodex.apk`이며, 소스의 Java namespace는 `dev.mobilecodex.app`입니다. 두 값의 차이는 의도된 구성입니다.
+
+| 경로 | 역할 |
+|---|---|
+| `app/src/main/java/` | Android 앱, 서비스, 파일 제공자, 계정·도구 연동 |
+| `app/src/main/assets/web/` | 채팅·설정 등 WebView 화면과 캐릭터 표시 |
+| `app/src/main/assets/android-sample/` | 기본 Android 샘플 프로젝트 |
+| `app/src/main/assets/android-templates/` | Java 기반 샘플을 확장하는 Kotlin·Compose 템플릿 |
+| `app/src/main/assets/linux/` | 선택적 Linux 환경의 구성과 실행 코드 |
+| `app/src/main/res/` | 런처·알림 아이콘, 테마, 문자열 등 Android 리소스 |
+| `tools/` | 런타임·개발 도구 준비, 네이티브 도구 빌드, 패키징·검증 스크립트 |
+| `tools/runtime-patches/` | 번들 Codex 런타임에 적용하는 패치 |
+| `packages/desktop-companion/` | 프로젝트 전송·동기화를 위한 보조 CLI |
+| `tests/`, `app/src/test/`, `app/src/androidTest/` | UI·로직·Android 테스트 코드 |
+| `icon-pack/` | 캐릭터 팩 소스 자산 |
+| `gradle/`, `app/build.gradle` | Gradle Wrapper, 의존성 및 앱 빌드 설정 |
+
+빌드 시 준비되는 `assets/runtime/`, `assets/devtools/`, `jniLibs/`와 다운로드 캐시는 Git에 포함하지 않습니다. APK에는 준비된 런타임과 도구가 패키징됩니다. 선택적 Linux 루트 파일 시스템은 별도로 다운로드합니다.
+
+## 소스에서 빌드하기
+
+빌드용 JDK **17**, Android SDK **35**, Build Tools **35.0.0**, 네이티브 도구용 Android NDK **r28c**가 필요합니다. Gradle **8.13**과 Android Gradle Plugin **8.9.2**는 저장소 설정을 따릅니다. 소스만 복제한 상태에서는 런타임 준비 검사를 통과할 수 없습니다.
+
+```sh
+git clone https://github.com/heemoonc/mobile-codex-for-apk.git
+cd mobile-codex-for-apk
+
+# 스크립트별 옵션과 실행 환경을 먼저 확인합니다.
+python3 tools/prepare_runtime.py --help
+python3 tools/prepare_devtools.py --help
+python3 tools/build_native.py --help
+
+# 고정된 런타임·개발 도구를 준비합니다.
+python3 tools/prepare_runtime.py
+python3 tools/prepare_devtools.py
+python3 tools/build_native.py --ndk "$ANDROID_NDK_HOME"
+
+# ANDROID_HOME에 SDK 위치를 설정한 뒤 빌드합니다.
+sh ./gradlew :app:assembleDebug
+```
+
+ARM64 Linux에서 빌드하는 경우 ARM64 호환 JDK·네이티브 빌드 도구·`aapt2`를 준비해야 합니다. 필요하면 `-Pandroid.aapt2FromMavenOverride=/path/to/aapt2`를 사용합니다. 일반 데스크톱용 Android SDK 바이너리가 ARM64에서 그대로 실행된다고 가정하지 마십시오.
+
+- 디버그 APK: `app/build/outputs/apk/debug/app-debug.apk`
+- 서명 구성: `MOBILE_CODEX_KEYSTORE`, `MOBILE_CODEX_STORE_PASSWORD`, `MOBILE_CODEX_KEY_ALIAS`, `MOBILE_CODEX_KEY_PASSWORD` 환경 변수. 키는 저장소 밖에서 보관합니다.
+- 진단 릴레이 기본 URL은 이 소스 사본에서 비워 두었습니다. 필요한 경우 별도로 구성합니다.
+- UI 검사: 지원되는 Node.js 버전에서 `npm ci` 후 `npm test`. 지원 범위는 `package.json`의 `engines`를 확인하십시오.
+- APK 재배포 시 `python3 tools/prepare_devtools_sources.py`로 생성한 개발 도구 대응 소스와 서드파티 고지를 함께 제공합니다.
+
+## 개인정보와 권한
+
+프로젝트 폴더는 사용자가 Android에서 허용한 범위와 앱의 실행 권한 안에서 접근합니다. 계정 인증, AI 요청, 선택적으로 켠 화면·음성 기능은 외부 서비스와 통신할 수 있습니다. 저장소에 계정 데이터, 인증 토큰, 개인 키, 서명 키 또는 개인 프로젝트 파일을 커밋하지 마십시오.
+
+이 저장소에는 앱 소스와 테스트 코드가 포함됩니다. 로컬 계정·키, 테스트 결과 보고서, 기기 기록, 개인 참고 문서, 자동 배포 워크플로는 배포 소스에서 제외합니다.
+
+## 라이선스와 원본 프로젝트
+
+- 앱 소스: [GPL-3.0-only](LICENSE).
+- 원본 프로젝트: [nokryong/mobile-codex](https://github.com/nokryong/mobile-codex).
+- 구성 요소별 저작권·라이선스: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), [`app/src/main/assets/legal/`](app/src/main/assets/legal/).
+- 번들 Codex 런타임의 고정 버전·원본·대응 소스: [`tools/runtime-lock.json`](tools/runtime-lock.json).
+- 개발 도구의 고정 버전·소스·체크섬: [`tools/devtools-lock.json`](tools/devtools-lock.json).
+
+OpenAI, Codex 및 기타 제품명은 각 소유자의 상표입니다. 이 포크가 해당 회사의 공식 제품이거나 인증된 앱임을 의미하지 않습니다.
+
+## 태블릿에서 Android 버전별 모의 검사
+
+- **Android 빌드 → Android 개발 도우미 → Android 버전별 모의 검사**에서 API 29~35를 선택합니다.
+- 준비 미리보기에서 변경 내용을 확인하고 적용하면 JUnit·Robolectric 4.18 및 기본 테스트 2개를 추가합니다. 자동 적용은 정적 단일 `app/build.gradle` Groovy 프로젝트만 지원하며, 기존 설정과 충돌하면 중단합니다.
+- 모의 검사는 프레임워크 리소스와 SharedPreferences의 기본 동작을 확인합니다. 앱 전체 기능·실제 Android OS·권한·그래픽·성능 호환성의 증명이 아닙니다. 실제 기기 결과와 별도 표에 기록합니다.
+- QEMU 확인은 현재 Linux 환경의 도구와 TCG 머신 초기화만 확인합니다. Android 이미지를 내려받거나 OS를 부팅하지 않습니다. QEMU가 없으면 설치되지 않았다고 표시합니다.
+- 전체 OS 에뮬레이션은 호환되는 이미지와 실행 환경이 추가로 필요합니다. 이 앱이 태블릿에서 모든 Android 버전의 OS 부팅을 제공하는 것은 아닙니다.
+
+Robolectric 4.18은 Linux ARM64 네이티브 런타임을 지원합니다. 기존에 생성된 프로젝트의 Robolectric 버전은 자동 변경하지 않습니다. API 선택 가능 여부가 해당 프로젝트의 실행 지원을 보장하지 않으므로 실제 실행으로 확인하십시오.
+
+Room·DataStore·로컬 HTTP 기능은 별도 [라이브러리 모의 검사 프로젝트](tools/android-library-simulation/README.md)에서 반복 검증할 수 있습니다. Linux 터미널에서 `sh tools/android-library-simulation/run.sh 29,35`를 실행하십시오. 이 결과는 기본 모의 검사 행렬에 자동으로 합쳐지지 않습니다.
+
+Robolectric 4.18: https://github.com/robolectric/robolectric/releases/tag/robolectric-4.18
+
+
+## 안드로이드 기기 하나로 앱 만들기
+
+1. 프로젝트 **+ → Android 앱 만들기**에서 이름·패키지·폴더와 Java·Kotlin·Compose 템플릿을 선택합니다.
+2. **도구 → Android 빌드**에서 Linux·JDK·SDK·aapt2 준비 상태를 확인합니다. SDK 약관과 설치 권한은 직접 확인합니다.
+3. **Android 개발 도우미**에서 라이브러리를 선택하고 **추가 미리보기 → 미리본 변경 적용**을 실행합니다. 기존 복잡한 Gradle 설정은 수동 검토가 필요할 수 있습니다.
+4. 채팅이나 파일 편집기로 기능과 테스트를 작성한 뒤 **빌드·Lint·단위 테스트 실행**으로 검증합니다.
+5. 빌드 결과에서 **APK 새로고침 → 정보 확인 → APK 저장**으로 산출물을 내보냅니다. 과거 APK와 혼동하지 않도록 패키지·버전·수정 시각을 확인합니다.
+6. 저장한 APK를 설치하고 저장·재실행·화면 회전 등 실제 사용 흐름을 확인합니다. 단위·모의 검사 통과만으로 실제 OS 호환성을 확정하지 않습니다.
+
+Java 기본 템플릿에는 라이브러리와 모의 검사 준비를 위한 빈 `dependencies` 블록이 포함됩니다. 이전 버전으로 생성한 Java 프로젝트에 이 블록이 없다면 기존 설정을 검토하고 최상위 `dependencies { }` 블록을 추가하십시오.
+
+## 개발 진행 화면과 자동 검증
+
+**도구 → 개발 진행 · 매뉴얼**에서 전체 개발 흐름을 확인합니다. Android 빌드와 개발 도우미의 **개발 진행 보기**에서도 열 수 있습니다.
+
+1. **개발 단계:** 프로젝트, 코드·라이브러리, 환경, 빌드·Lint·단위 테스트, API 모의 검사, APK 설치·실사용을 한 화면에서 확인합니다.
+2. **자동 검증:** 쓰기 가능한 Android 프로젝트와 Linux를 준비한 뒤 시작합니다. 환경 확인 → 빌드·Lint·단위 테스트 → 선택한 API 모의 검사를 차례로 실행합니다. 모의 검사는 기본으로 꺼져 있으며 개발 도우미에서 먼저 준비해야 합니다.
+3. **사용 매뉴얼:** 환경 구성부터 라이브러리 변경, 테스트 작성, APK 저장·설치, 오류 해결까지 앱 안에서 읽습니다.
+
+자동 검증은 기본 `app` 모듈의 `assembleDebug`, `lintDebug`, `testDebugUnitTest`를 실행합니다. 테스트를 다시 실행하여 실제 실행 건수를 확인하며, 테스트 0개·건너뜀·실패·확인되지 않은 실행 기록은 다음 단계로 진행하지 않습니다. 사용자 정의 모듈과 빌드 변형은 기존 개발 도우미·터미널에서 프로젝트에 맞게 실행하십시오.
+
+검증 기록은 현재 프로젝트의 소스 지문과 도구 설정이 일치할 때만 유효합니다. 소스·라이브러리 변경, APK 설치, 권한 확인, 실제 기기 조작은 자동으로 수행하지 않습니다. 직접 확인 체크는 사용자 진술이며 실기 통과 기록이 아닙니다. 모의 검사도 다른 Android OS의 실기 검증을 대신하지 않습니다.
+
+진행 중에는 **자동 진행 중지**와 **실행 로그 보기**를 사용할 수 있습니다. 프로젝트·계정 변경은 다음 단계를 중단하며, 앱 화면을 다시 불러온 뒤에는 자동 재개하지 않습니다. 매뉴얼 열람과 상태 조회만으로 명령이 실행되지는 않습니다.
+
+### 다음 할 일과 오류 해결
+
+개발 단계 화면 위의 **다음 할 일**은 현재 프로젝트와 검증 기록에 맞는 메뉴를 안내합니다. 새 앱은 **사이드바 프로젝트 + → Android 앱 만들기**에서 생성하고, 기존 소스는 **프로젝트 + → 로컬 폴더 연결**로 엽니다. 채팅에서 기능과 테스트 작성을 요청한 뒤 필요한 라이브러리를 개발 도우미에서 확인할 수 있습니다.
+
+일반 단위 테스트에는 `app/src/test`의 테스트 소스와 JUnit 의존성이 필요합니다. API 모의 검사도 사용할 경우 **개발 도우미 → 모의 검사 준비 미리보기 → 미리본 모의 검사 준비 적용**으로 JUnit·Robolectric과 기준 테스트를 준비할 수 있습니다. 모의 검사 준비는 기능 테스트를 대신 작성하지 않습니다.
+
+검사가 멈추면 **검사가 멈췄을 때**에 테스트 0개·건너뜀·테스트 실패·환경 오류 등의 해결 안내가 나타납니다. **해결 방법 매뉴얼 열기**와 **실행 로그 보기**를 함께 사용하십시오. 직접 확인 체크는 사용자 진술이며 설치·실사용을 자동으로 증명하지 않습니다.
+
+## 최초 설치 후 Android 개발 환경 설정
+
+첫 화면의 **개발 환경 설정 시작** 또는 **도구 → Android 개발 환경 설정**을 누릅니다. 계정 연결·프로젝트 선택 전에도 사용할 수 있습니다.
+
+1. 별도 Linux 환경을 설치·활성화합니다. 인터넷과 저장 공간이 필요합니다.
+2. **도구 다운로드·설치**에서 출처·SDK 약관 전문을 확인하고 직접 동의하면 다운로드·설치합니다. 다운로드 약 310 MiB, 여유 공간 최소 1500 MiB가 필요합니다. 고정 버전의 크기·SHA-256을 검증합니다. Temurin JDK 17.0.21+9, Google SDK Platform 35 rev 2·Build Tools 35.0.0, Commit451 커뮤니티 ARM64 aapt2를 사용하며 Google 공식 ARM64 바이너리는 아닙니다. 기존 `/opt/android`는 덮어쓰지 않습니다. 중지·실패 후 재시도하면 다시 다운로드합니다.
+3. 프로젝트와 분리된 디렉터리에서 `/opt/android` 기본 경로의 Java·javac·SDK Platform 35·D8·ARM64 aapt2 실행을 확인합니다. 파일 존재만으로 통과하지 않습니다.
+4. Android 프로젝트를 만들고 빌드·테스트합니다. Gradle과 프로젝트 의존성은 첫 빌드에서 다운로드합니다. 기존 프로젝트의 사용자 지정 경로는 바꾸지 않습니다.
+
+첫 화면 안내는 나중에 숨길 수 있으며 도구·Android 빌드에서 다시 열 수 있습니다. 앱을 여는 것만으로 설치·명령 실행하지 않습니다. 화면을 닫아도 확인은 이어지며 앱 재시작 후에는 다시 실행해야 합니다.

@@ -1,0 +1,96 @@
+plugins { id 'com.android.application' }
+
+def suppliedSigningStore = System.getenv('MOBILE_CODEX_KEYSTORE')
+
+android {
+    namespace 'dev.mobilecodex.app'
+    compileSdk 35
+    buildFeatures { buildConfig true }
+    defaultConfig {
+        applicationId 'dev.mobilecodex.apk'
+        minSdk 29
+        targetSdk 35
+        versionCode 115
+        versionName '0.3.9-apk-dev41'
+        buildConfigField 'String', 'SOURCE_SHA', '"' + ((System.getenv('GITHUB_SHA') ?: 'local').take(12)) + '"'
+        buildConfigField 'String', 'REPORT_RELAY_URL', '""'
+        ndk { abiFilters 'arm64-v8a' }
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+    }
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+            keepDebugSymbols += ['**/*.so']
+        }
+    }
+    signingConfigs {
+        if (suppliedSigningStore) {
+            provided {
+                storeFile file(suppliedSigningStore)
+                storePassword System.getenv('MOBILE_CODEX_STORE_PASSWORD')
+                keyAlias System.getenv('MOBILE_CODEX_KEY_ALIAS')
+                keyPassword System.getenv('MOBILE_CODEX_KEY_PASSWORD')
+            }
+        }
+    }
+    buildTypes {
+        bootstrap {
+            initWith debug
+            applicationIdSuffix '.probe'
+            versionNameSuffix '-probe'
+            matchingFallbacks = ['debug']
+        }
+        debug { if (suppliedSigningStore) signingConfig signingConfigs.provided }
+        release {
+            debuggable false
+            minifyEnabled false
+            if (suppliedSigningStore) signingConfig signingConfigs.provided
+        }
+    }
+    testOptions { unitTests { returnDefaultValues = true; includeAndroidResources = true } }
+    lint { abortOnError true }
+}
+
+dependencies {
+    implementation 'androidx.core:core:1.15.0'
+    implementation 'io.github.webrtc-sdk:android:150.7871.01'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.json:json:20240303'
+    testImplementation 'org.robolectric:robolectric:4.14.1'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+}
+
+tasks.register('verifyRuntime') {
+    doLast {
+        def toolsManifest = file('src/main/assets/devtools/manifest.json')
+        if (!toolsManifest.isFile() || !file('src/main/assets/devtools/payload.zip').isFile())
+            throw new GradleException('Run tools/prepare_devtools.py and tools/build_native.py before building.')
+        def bundled = new groovy.json.JsonSlurper().parse(toolsManifest)
+        def required = (bundled.nativeFiles.keySet() + bundled.requiredNative).unique()
+        if (!required.every { file('src/main/jniLibs/arm64-v8a/' + it).isFile() })
+            throw new GradleException('Bundled development tools are incomplete; run the runtime preparation scripts.')
+        if (!['libcodex.so', 'libcodexmodehostx.so', 'libc++_shared.so'].every { file('src/main/jniLibs/arm64-v8a/' + it).exists() }) {
+            throw new GradleException('Run python3 tools/prepare_runtime.py before building. The application must include its runtime.')
+        }
+    }
+}
+def legalAssets = layout.buildDirectory.dir('generated/legalAssets')
+android.sourceSets.main.assets.srcDir(legalAssets)
+tasks.register('prepareLegalAssets', Sync) {
+    from(rootProject.file('LICENSE'), rootProject.file('THIRD_PARTY_NOTICES.md'))
+    into(legalAssets.map { it.dir('legal') })
+}
+tasks.named('preBuild').configure { dependsOn 'verifyRuntime', 'prepareLegalAssets' }
+
+// Keep resolved module versions stable; update deliberately with --write-locks.
+dependencyLocking {
+    lockAllConfigurations()
+    lockMode = LockMode.STRICT
+}

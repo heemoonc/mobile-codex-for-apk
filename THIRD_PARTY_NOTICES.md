@@ -1,0 +1,46 @@
+# Third-party notices
+
+Mobile Codex is an independent client; it is not an official OpenAI Android application.
+
+The APK bundles a pinned Android port of Codex:
+- Source: https://github.com/DioNanos/codex-termux/tree/c382cb99717bbaedd0e79c61835ddfc966423424
+- Upstream: https://github.com/openai/codex
+- Package: `@mmmbuto/codex-cli-termux@0.162.1-termux.1`
+- The bundled build adds the Live voice catalog patch in `tools/runtime-patches/`. The exact patched source and runtime archives are available at https://github.com/nokryong/mobile-codex/releases/tag/runtime-0.162.1-live-v3; checksums and source references are pinned in `tools/runtime-lock.json`.
+- The package's original `LICENSE` and `NOTICE` are copied into `assets/runtime/` at build time.
+- A fixed-width helper executable name change is applied for Android APK native-library packaging. See `tools/prepare_runtime.py` and README.
+- The original archive integrity and the resulting packaged file hashes are recorded separately.
+
+AndroidX Core 1.15.0 (Apache-2.0) supplies window-inset compatibility across Android versions. Java desugaring libraries are provided by the Android Open Source Project. Test-only dependencies include JUnit, AndroidX Test, Robolectric, org.json, jsdom, and Playwright, as declared in the Gradle/npm manifests. Their upstream license terms apply.
+
+Native Live audio uses `io.github.webrtc-sdk:android:150.7871.01`, distributed through Maven Central by https://github.com/webrtc-sdk/android/tree/v150.7871.01. WebRTC is BSD-3-Clause with additional bundled third-party licenses. The distributor's MIT license and complete WebRTC notices from that release are packaged in `assets/legal/WEBRTC-SDK-LICENSE` and `assets/legal/WEBRTC-LICENSES.md`.
+
+## Original project code
+
+Original Mobile Codex code and original artwork are GPL-3.0-only (see LICENSE), copyright 2026 nokryong and contributors. Third-party components are not relicensed by this declaration. Third-party trademarks remain with their owners. The launcher uses an original antler-and-terminal design.
+
+## Bundled developer tools
+
+Python, Node.js, Git, and their runtime libraries are pinned in `tools/devtools-lock.json`. These components have different upstream licenses, including permissive and copyleft terms. The preparation scripts preserve package license notices in the APK. `devtools-corresponding-source.zip` accompanies releases with upstream source archives, pinned Termux build recipes, patches, packaging scripts, and their notices. `SOURCES.json` maps each source archive to its original URL and SHA-256. Keep the corresponding sources and notices available when redistributing an APK.
+
+App license notices are also packaged under `assets/legal/`.
+
+## Optional Linux runtime
+
+PRoot 5.1.107.96 (GPL version 2 `COPYING` file), libtalloc 2.5.0 (LGPL version 3 `LICENSE` file), and libandroid-shmem 0.7 (three-clause BSD `LICENSE` file) are included as small Android native components. Their exact package archives, source archives, and Termux recipes are pinned in `tools/devtools-lock.json` and included in the corresponding-source process above. PRoot source: https://github.com/termux/proot. Termux build recipes: https://github.com/termux/termux-packages.
+
+The optional Arch Linux ARM root filesystem is downloaded only at the user's request from the official Termux proot-distro v4.29.0 release. It is not bundled in the APK. Its URL, SHA-256, size, and provenance are pinned in `app/src/main/assets/linux/manifest.json`. The distribution's packages retain their own licenses and source obligations; their notices and package metadata remain in the installed root filesystem. Upstream: https://github.com/termux/proot-distro/releases/tag/v4.29.0 and https://archlinuxarm.org.
+
+## Chat icon vocabulary and renderer adaptation
+
+The Chat WebView icon renderer uses the vocabulary and category mappings from nokryong/ChatGPT-DCCon-Renderer-Optimized, userscript.js at commit 98e9aee413c2ff6a91531f46f4a92da008b19a95, integrated at the same repository owner's request. Source: https://github.com/nokryong/ChatGPT-DCCon-Renderer-Optimized. Public icon artwork is read from the owner's Firebase Storage bucket with the existing packaged artwork as fallback. No Firebase authentication credentials or SDK are bundled.
+
+## Invited agents
+
+The participant mention rules (`AgentGroup.java`) and provider event normalization (`assets/rooms/provider-events.cjs`) are adapted from CodePet (MIT), https://github.com/SeeUSoon93/desktop-pet at commit eaa10df8b3fb0ab0d6f796f618c158ab5acb4cf8. The original license is included in `assets/rooms/CODEPET-LICENSE`.
+
+Claude Code and Google Antigravity CLI are optional, separately downloaded through their official installers at the user's request. They are not included in the APK and remain subject to their respective license and account terms.
+
+## Fork character artwork
+
+The gptchan and astrachan source packs under icon-pack/ include AI-generated artwork prepared for this fork. The gptchan pack was generated using the image_gen tool; generated pack reference sheets and descriptive notes are omitted from this upload snapshot.

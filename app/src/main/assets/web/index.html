@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src blob:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Mobile Codex</title>
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="visual-system.css">
+  <link rel="stylesheet" href="spacing.css">
+  <link rel="stylesheet" href="agents.css">
+  <link rel="stylesheet" href="live.css">
+  <script src="ui-core.js" defer></script>
+  <script src="translations.js" defer></script>
+  <script src="locale.js" defer></script>
+  <script src="agents-ui.js" defer></script>
+  <script src="live.js" defer></script>
+  <script src="reports.js" defer></script>
+  <script src="android-assistant.js" defer></script>
+  <script src="android-workflow.js" defer></script>
+  <script src="android-setup.js" defer></script>
+  <script src="android-start.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <svg class="symbols" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-15-2 18"/></symbol>
+    <symbol id="i-panel" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M5 8h14M5 16h14"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="m13 2-8 12h6l-1 8 9-13h-6l1-7Z"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14v6Z"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9ZM14 3v6h6M8 13h8M8 17h5"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8"/></symbol>
+    <symbol id="i-live" viewBox="0 0 24 24"><path d="M4 10v4m4-8v12m4-15v18m4-15v12m4-8v4"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></symbol>
+    <symbol id="i-attach" viewBox="0 0 24 24"><path d="m20.5 11.5-8.8 8.8a6 6 0 0 1-8.5-8.5L13.1 1.9a4 4 0 0 1 5.7 5.7l-10 10a2 2 0 0 1-2.9-2.9l9.2-9.2"/></symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18m-2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></symbol>
+  <symbol id="i-apk-brand" viewBox="0 0 108 108"><rect x="0" y="0" width="108" height="108" rx="24" fill="#FFB52E"/><g transform="translate(-19.7 -22.8) scale(1.34)"><path d="M30,30H78Q84,30 84,36V72Q84,78 78,78H30Q24,78 24,72V36Q24,30 30,30Z" fill="#142B45"/><path d="M42,42L33,51L42,60M66,42L75,51L66,60M57,40L51,61" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M50,64H82Q86,64 86,68V80Q86,84 82,84H50Q46,84 46,80V68Q46,64 50,64Z" fill="#FFFFFF"/><path d="M52,78L55,69L58,78M53,75H57M62,78V69H66Q70,69 70,72Q70,75 66,75H62M74,69V78M81,69L75,74L81,78" fill="none" stroke="#142B45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g></symbol></defs></svg>
+  <div id="scrim" class="scrim" hidden></div>
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-top"><div class="sidebar-identity"><div class="brand"><svg class="apk-brand-icon" role="img" aria-label="Mobile Codex for APK" viewBox="0 0 108 108"><use href="#i-apk-brand"/></svg><span id="sidebar-brand-name" class="sr-only">Codex</span><span class="mobile-tag" aria-hidden="true">mobile</span></div></div><button class="icon-button sidebar-toggle" aria-label="사이드바 접기"><svg><use href="#i-menu"/></svg></button></div>
+    <div class="sidebar-scroll">
+    <button id="new-chat" class="nav-button"><svg><use href="#i-edit"/></svg>새 대화<span class="keyhint">+</span></button>
+    <div class="section-title"><span>프로젝트</span><span class="section-actions"><button id="add-project" class="icon-button" aria-label="프로젝트 추가"><svg><use href="#i-plus"/></svg></button><button id="toggle-projects" class="icon-button section-toggle" type="button" aria-label="프로젝트 접기" aria-controls="projects" aria-expanded="true"><svg><use href="#i-down"/></svg></button></span></div>
+    <span id="project-label" hidden>폴더 선택</span><div id="projects" class="projects" aria-label="프로젝트 목록"></div>
+    <div class="section-title history-title"><span>일반 대화</span><button id="toggle-history" class="icon-button section-toggle" type="button" aria-label="일반 대화 접기" aria-controls="sessions" aria-expanded="true"><svg><use href="#i-down"/></svg></button></div>
+    <div id="sessions" class="sessions"><p class="sidebar-empty">대화를 시작하면 여기에 표시됩니다.</p></div>
+    </div>
+    <div class="sidebar-bottom"><button id="show-tools" class="nav-button" aria-haspopup="dialog" aria-controls="tool-menu-dialog"><svg><use href="#i-settings"/></svg>도구</button><button id="settings" class="nav-button"><svg><use href="#i-settings"/></svg>설정</button><button id="account-button" class="account-button" aria-haspopup="dialog" aria-controls="settings-dialog"><span id="quota-ring" class="quota-ring" style="--remaining:0" role="img" aria-label="사용 한도 정보 없음"><span id="quota-ring-value">–</span></span><span class="quota-copy"><strong id="quota-percent">Codex</strong><small id="quota-caption">계정 설정</small></span><svg class="account-chevron"><use href="#i-chevron-right"/></svg></button></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div class="topbar-left"><button class="icon-button sidebar-toggle" aria-label="사이드바 열기"><svg><use href="#i-menu"/></svg></button><span id="header-project">새 대화</span><span class="topbar-divider">/</span><span id="header-title">Mobile Codex</span></div><div class="topbar-actions"><button id="agents-toggle" class="outline-button agents-toggle" aria-controls="agents-panel" aria-expanded="false" aria-label="참가자"><span id="agents-avatars" class="agent-avatars" aria-hidden="true"></span><span>참가자</span></button><button id="files-toggle" class="outline-button"><svg><use href="#i-panel"/></svg><span>파일</span></button></div></header>
+    <div class="workspace-body">
+      <section class="conversation">
+        <div id="chat-scroll" class="chat-scroll">
+          <div id="welcome" class="welcome">
+            <div id="welcome-character" class="welcome-character"></div><div class="welcome-mark"><svg class="apk-brand-icon" role="img" aria-label="Mobile Codex for APK" viewBox="0 0 108 108"><use href="#i-apk-brand"/></svg></div>
+            <h1 id="welcome-title">어떤 작업을 할까요?</h1>
+            <p id="welcome-description">아이디어부터 코드, 기기의 파일까지. Codex와 함께 작업하세요.</p>
+            <div class="android-start-entry"><button id="welcome-android-start" class="primary-button">Android 개발 시작</button></div>
+            <div id="android-setup-banner" class="setup-intro"><strong>이 기기에서 Android 앱 만들기</strong><p>최초 설치 후 개발 환경을 준비하십시오. 계정 연결이나 프로젝트 선택 전에도 설정할 수 있습니다.</p><div class="build-actions"><button id="welcome-setup-open" class="primary-button">개발 환경 설정 시작</button><button id="setup-banner-later" class="secondary-button">나중에</button></div></div>
+            <div class="onboarding" id="onboarding" hidden>
+              <button id="connect" class="setup-row"><span class="step" id="login-step">1</span><span><strong>ChatGPT 계정 연결</strong><small>사용 중인 계정으로 시작하세요</small></span><span class="row-arrow">→</span></button>
+              <button id="choose-folder" class="setup-row"><span class="step" id="folder-step">2</span><span><strong>작업 폴더 선택</strong><small>프로젝트 폴더를 연결하세요</small></span><span class="row-arrow">→</span></button>
+            </div>
+            <div class="suggestions" id="suggestions" hidden><button data-prompt="이 폴더에 어떤 파일이 있는지 살펴보고 정리해줘."><svg><use href="#i-folder"/></svg>폴더 살펴보기</button><button data-prompt="이 프로젝트를 살펴보고 실행 방법과 개선할 부분을 알려줘."><svg><use href="#i-edit"/></svg>프로젝트 이해하기</button><button data-prompt="이 프로젝트의 변경 사항을 검토하고 버그가 있는지 찾아줘."><svg><use href="#i-search"/></svg>변경 사항 검토</button></div>
+          </div>
+          <div id="messages" class="messages" aria-live="polite"></div>
+          <button id="report-error-open" class="secondary-button report-error" hidden>오류 정보 보내기</button>
+          <div id="activity" class="activity" hidden><span id="activity-character" class="activity-character"></span><span class="pulse-dot"></span><span id="activity-text">작업 중</span></div>
+        </div>
+        <div class="composer-wrap">
+          <button id="jump-latest" class="jump-latest" aria-label="최신 메시지로 이동" hidden><svg><use href="#i-down"/></svg><span>최신 메시지</span></button>
+          <form id="composer" class="composer">
+            <section id="dictation" class="dictation" aria-label="음성 입력" hidden>
+              <div class="dictation-top"><span id="dictation-status" role="status"></span><span id="dictation-time" aria-label="녹음 시간">0:00</span></div>
+              <progress id="dictation-level" class="dictation-level" max="1" value="0" aria-label="마이크 입력 크기"></progress>
+              <p id="dictation-preview" class="dictation-preview"></p>
+              <div class="dictation-actions"><button id="dictation-cancel" type="button" class="secondary-button">취소</button><button id="dictation-done" type="button" class="primary-button">완료</button></div>
+            </section>
+            <div id="draft-context" class="draft-context" hidden aria-label="첨부와 대화 컨텍스트"></div>
+            <textarea id="prompt" rows="1" aria-controls="autocomplete" aria-expanded="false" aria-autocomplete="list" aria-label="Codex에게 요청" placeholder="Codex에게 물어보기" maxlength="50000"></textarea>
+            <div id="autocomplete" class="autocomplete" role="listbox" aria-label="자동 완성" hidden></div>
+            <div class="composer-bottom">
+              <div class="composer-add-wrap">
+                <button id="add-attachment" type="button" class="icon-button composer-attach" aria-label="파일 첨부" aria-haspopup="menu" aria-controls="composer-add-menu" aria-expanded="false"><svg><use href="#i-plus"/></svg></button>
+                <div id="composer-add-menu" class="composer-add-menu" role="menu" aria-label="파일 첨부" hidden>
+                  <button id="composer-attach" type="button" role="menuitem"><svg><use href="#i-attach"/></svg><span>파일 첨부</span></button>
+                  <button id="composer-invite" type="button" role="menuitem"><svg><use href="#i-users"/></svg><span>에이전트 초대</span></button>
+                </div>
+              </div>
+              <button id="composer-folder" type="button" class="context-button" aria-label="작업 폴더 선택"><svg><use href="#i-folder"/></svg><span id="context-folder">폴더 선택</span></button>
+              <div class="composer-actions">
+                <button id="composer-options" type="button" class="context-button options-button" aria-haspopup="dialog" aria-controls="model-picker" aria-expanded="false"><span id="model-summary">모델 목록 조회 필요</span><span id="effort-summary"></span><svg><use href="#i-down"/></svg></button>
+                <button id="fast-mode" type="button" class="icon-button fast-mode-button" aria-label="Fast 모드" aria-pressed="false" title="Fast 모드" disabled><svg><use href="#i-bolt"/></svg></button>
+                <button id="voice-input" type="button" class="icon-button voice-button" aria-label="음성 입력" title="음성 입력"><svg><use href="#i-mic"/></svg></button>
+                <button id="live-start" type="button" class="icon-button" aria-label="Live 음성 대화" title="Live"><svg><use href="#i-live"/></svg></button>
+                <button id="send" type="submit" class="send-button" aria-label="보내기" disabled><svg><use href="#i-up"/></svg></button>
+                <button id="stop" type="button" class="send-button" aria-label="작업 중지" hidden><svg><use href="#i-stop"/></svg></button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+      <aside id="agents-panel" class="file-panel agents-panel" aria-labelledby="agents-panel-title" hidden><div class="panel-head"><strong id="agents-panel-title">참가자</strong><div><button id="agents-close" class="icon-button" aria-label="참가자 닫기"><svg><use href="#i-close"/></svg></button></div></div><p class="agents-note muted">이름을 누르면 설정을 바꿀 수 있습니다. 멘션이 없으면 모두 동시에 답합니다.</p><div id="agents-list" class="agents-list"></div><div class="agents-panel-foot"><button id="agents-invite" class="secondary-button" type="button"><svg><use href="#i-users"/></svg><span>에이전트 초대</span></button></div></aside>
+      <aside id="file-panel" class="file-panel" hidden><div class="panel-head"><strong>파일</strong><div><button id="file-up" class="icon-button" aria-label="상위 폴더"><svg><use href="#i-up"/></svg></button><button id="file-new" class="icon-button" aria-label="새 파일"><svg><use href="#i-plus"/></svg></button><button id="folder-new" class="icon-button" aria-label="새 폴더"><svg><use href="#i-folder"/></svg></button><button id="file-close" class="icon-button" aria-label="파일 탐색 닫기"><svg><use href="#i-close"/></svg></button></div></div><div class="file-search"><svg><use href="#i-search"/></svg><input id="file-query" placeholder="파일 이름 검색" aria-label="파일 이름 검색"></div><div id="breadcrumbs" class="breadcrumbs">작업 폴더</div><div id="file-list" class="file-list"></div></aside>
+    </div>
+  </main>
+  <dialog id="invite-dialog" class="sheet-dialog invite-sheet" aria-labelledby="invite-title"><button type="button" class="sheet-grip" data-close="invite-dialog" aria-label="아래로 끌거나 눌러서 닫기"><span aria-hidden="true"></span></button>
+    <div class="dialog-head"><div><p class="eyebrow">그룹 대화</p><h2 id="invite-title">에이전트 초대</h2></div><button class="icon-button" data-close="invite-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div>
+    <p class="muted">초대한 에이전트는 지금까지의 대화를 읽고 함께 답합니다. @claude, @gemini로 한 명만 부를 수도 있습니다.</p>
+    <div id="invite-list" class="invite-list" role="group" aria-label="초대할 에이전트"></div>
+    <p id="invite-status" class="muted" role="status" aria-live="polite"></p>
+    <button id="invite-confirm" class="primary-button sheet-done" type="button" disabled>초대</button>
+  </dialog>
+  <dialog id="model-picker" aria-labelledby="model-picker-title">
+    <div class="model-picker-head"><span id="model-picker-title">추론 강도</span><button class="icon-button" data-close="model-picker" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div>
+    <div id="model-picker-panels" class="model-picker-panels">
+      <section id="reasoning-panel" class="model-picker-panel">
+        <button id="model-picker-model" type="button" class="model-picker-heading" aria-controls="model-panel" aria-expanded="false"><strong id="effort-heading"></strong><span><span id="model-heading"></span><svg><use href="#i-down"/></svg></span></button>
+        <div id="reasoning-control" class="reasoning-control">
+          <input id="effort-slider" type="range" min="0" max="0" step="1" value="0" aria-label="추론 강도">
+        </div>
+        <p id="effort-unavailable" class="muted" hidden>추론 강도 조절 미지원</p>
+      </section>
+      <section id="model-panel" class="model-picker-panel" inert aria-hidden="true">
+        <button id="model-picker-back" type="button" class="model-picker-back"><svg><use href="#i-back"/></svg><span>추론 강도</span></button>
+        <div id="model-list" class="model-list" role="radiogroup" aria-label="모델"></div>
+      </section>
+    </div>
+    <small id="model-refresh-status" role="status" aria-live="polite" hidden></small>
+    <div class="model-picker-footer"><button id="model-picker-permissions" type="button"><svg><use href="#i-settings"/></svg><span>작업 권한</span><svg><use href="#i-down"/></svg></button></div>
+    <select id="model" hidden aria-hidden="true" tabindex="-1"><option value="">모델 목록 조회 필요</option></select>
+    <select id="effort" hidden aria-hidden="true" tabindex="-1"><option value="">추론 설정 정보 없음</option></select>
+    <span id="model-help" hidden></span>
+  </dialog>
+  <dialog id="options-dialog" class="sheet-dialog options-sheet" aria-labelledby="options-title"><button type="button" class="sheet-grip" data-close="options-dialog" aria-label="아래로 끌거나 눌러서 닫기"><span aria-hidden="true"></span></button>
+    <div class="dialog-head"><h2 id="options-title">작업 권한</h2><button class="icon-button" data-close="options-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div>
+    <label class="option-field"><span>승인 방식</span><select id="approval-mode" aria-label="승인 방식"><option value="ask">승인 받기</option><option value="auto-review" selected>자동 검토</option><option value="allow-all">모두 허용</option></select></label>
+    <fieldset class="permission-field"><legend>작업 권한</legend><label><input type="radio" name="permission" value="read-only"> <span><strong>읽기 전용</strong><small>파일을 살펴보고 제안합니다.</small></span></label><label><input type="radio" name="permission" value="workspace-write" checked> <span><strong>프로젝트 쓰기</strong><small>선택한 폴더 안에서 파일을 바꿀 수 있습니다.</small></span></label><label><input type="radio" name="permission" value="danger-full-access"> <span><strong>전체 접근</strong><small>앱에 허용된 기기 파일과 명령을 사용합니다.</small></span></label><select id="permissions" hidden><option value="read-only">읽기 전용</option><option value="workspace-write" selected>프로젝트 쓰기</option><option value="danger-full-access">전체 접근</option></select></fieldset>
+    <p id="permission-help" class="muted"></p>
+    <button class="primary-button sheet-done" data-close="options-dialog">완료</button>
+  </dialog>
+  <dialog id="file-actions-dialog" class="sheet-dialog" aria-labelledby="file-actions-title"><button type="button" class="sheet-grip" data-close="file-actions-dialog" aria-label="아래로 끌거나 눌러서 닫기"><span aria-hidden="true"></span></button><div class="dialog-head"><h2 id="file-actions-title">파일 관리</h2><button class="icon-button" data-close="file-actions-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div><div id="file-actions"></div></dialog>
+  <dialog id="session-actions-dialog" class="sheet-dialog" aria-labelledby="session-actions-title"><button type="button" class="sheet-grip" data-close="session-actions-dialog" aria-label="아래로 끌거나 눌러서 닫기"><span aria-hidden="true"></span></button><div class="dialog-head"><h2 id="session-actions-title">대화 관리</h2><button class="icon-button" data-close="session-actions-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div><div id="session-actions"></div></dialog>
+  <dialog id="project-actions-dialog" class="sheet-dialog" aria-labelledby="project-actions-title"><button type="button" class="sheet-grip" data-close="project-actions-dialog" aria-label="아래로 끌거나 눌러서 닫기"><span aria-hidden="true"></span></button><div class="dialog-head"><h2 id="project-actions-title">프로젝트 관리</h2><button class="icon-button" data-close="project-actions-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div><div id="project-actions" class="project-actions"></div></dialog>
+  <dialog id="source-restore-dialog" class="sheet-dialog" aria-labelledby="source-restore-title"><div class="dialog-head"><h2 id="source-restore-title">소스 ZIP 복원</h2><button class="icon-button" data-close="source-restore-dialog" aria-label="닫기">×</button></div><p id="source-restore-summary" class="muted"></p><p class="muted">새 폴더에 복원합니다. 소스·패키지명·버전은 바꾸지 않습니다. 같은 패키지의 APK를 설치하면 기존 앱을 업데이트할 수 있습니다. 자동 빌드·설치·AI 전송은 하지 않습니다.</p><label for="source-restore-name">프로젝트 이름</label><input id="source-restore-name" class="text-input" maxlength="80"><label for="source-restore-folder">새 폴더 이름</label><input id="source-restore-folder" class="text-input" maxlength="64"><p id="source-restore-error" class="muted" role="status"></p><button id="source-restore-apply" class="primary-button">복원하고 열기</button></dialog>
+  <dialog id="project-link-dialog" class="sheet-dialog" aria-labelledby="project-link-title"><button type="button" class="sheet-grip" data-close="project-link-dialog" aria-label="아래로 끌거나 눌러서 닫기"><span aria-hidden="true"></span></button><div class="dialog-head"><h2 id="project-link-title">프로젝트 연결</h2><button class="icon-button" data-close="project-link-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div><p id="project-link-description" class="muted"></p><div id="project-link-choices" class="project-actions"></div></dialog>
+  <dialog id="android-setup-dialog" class="sheet-dialog" aria-labelledby="as-title"><div class="dialog-head"><h2 id="as-title">Android 개발 환경 설정</h2><button class="icon-button" data-close="android-setup-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div>
+    <p>프로젝트 선택 없이 Linux와 개발 도구를 준비합니다. 원본 앱의 환경은 자동 공유되지 않습니다.</p>
+    <ol id="as-steps" class="setup-steps"></ol><div id="as-status-row" class="operation-status" aria-busy="false"><span id="as-spinner" class="operation-spinner" aria-hidden="true" hidden></span><p id="as-status" role="status" aria-live="polite"></p></div>
+    <p id="as-help">도구 다운로드에서 출처·용량·SDK 약관을 확인하고 동의한 뒤 설치합니다. 기존 도구는 덮어쓰지 않습니다.</p>
+    <p>Linux 설치에는 인터넷과 별도 저장 공간이 필요합니다. 도구 다운로드는 약 310 MiB이며 설치에 최소 1500 MiB의 여유 공간이 필요합니다. Gradle·라이브러리는 첫 프로젝트 빌드에서 다운로드합니다.</p><p id="as-space" class="muted"></p>
+    <pre id="as-paths" aria-label="기본 개발 도구 경로"></pre><p>새 프로젝트는 이 기본 경로를 사용합니다. 기존 프로젝트의 사용자 지정 경로는 변경하지 않습니다.</p>
+    <div class="build-actions"><button id="as-linux" class="primary-button">1. Linux 설치·활성화</button><button id="as-download" class="primary-button">2. 도구 다운로드·설치</button><button id="as-check" class="primary-button">3. 개발 도구 실행 확인</button></div>
+    <section id="as-download-panel" hidden aria-labelledby="as-download-title"><h3 id="as-download-title">다운로드 출처와 SDK 약관</h3>
+      <p>다운로드 약 310 MiB · 여유 공간 최소 1500 MiB. Temurin JDK와 Google SDK는 원 제작사에서 받습니다. ARM64 aapt2는 Commit451 커뮤니티 빌드이며 Google 공식 ARM64 바이너리가 아닙니다. Gradle·라이브러리는 첫 빌드에서 별도 다운로드합니다.</p>
+      <div id="as-download-details"></div><p>SDK 약관 전문은 영문 원문입니다. 동의하지 않으면 다운로드하지 않습니다. 다른 도구의 라이선스·NOTICE도 설치 폴더에 보존합니다.</p>
+      <label class="setup-consent"><input id="as-consent" type="checkbox"> <span>위 Android SDK 약관을 읽었으며 동의합니다.</span></label>
+      <button id="as-download-start" class="primary-button" disabled>동의하고 도구 다운로드·설치</button>
+    </section>
+    <div class="build-actions"><button id="as-stop" class="secondary-button" disabled>다운로드·환경 확인 중지</button><button id="as-log" class="secondary-button">실행 로그 보기</button><button id="as-refresh" class="secondary-button">준비 상태 새로고침</button></div>
+    <button id="as-project" class="primary-button" disabled>4. Android 프로젝트 만들기</button><p class="muted">설치·파일 존재와 실행 통과는 구분합니다. 확인 중 이 화면을 닫아도 작업은 이어지며 앱 재시작 시 자동 재개하지 않습니다.</p>
+  </dialog>
+  <dialog id="android-start-dialog" class="android-start-dialog" aria-labelledby="ad-title">
+    <div class="dialog-head"><h2 id="ad-title">Android 개발 시작</h2><button class="icon-button" data-close="android-start-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div>
+    <p>프로젝트는 앱 내부 공간에서 작업하고, Linux에서 같은 파일을 빌드합니다. GitHub와 ChatGPT 계정 연결 없이도 프로젝트 생성과 빌드를 시작할 수 있습니다.</p>
+    <p id="ad-current" class="muted"></p>
+    <h3>프로젝트 준비</h3>
+    <div class="android-start-grid"><button id="ad-create" class="secondary-button project-choice"><span>새 Android 프로젝트</span><small>Java · Kotlin · Compose</small></button><button id="ad-folder" class="secondary-button project-choice"><span>폴더에서 가져오기</span><small>원본을 보존하고 내부 공간에 복사</small></button><button id="ad-zip" class="secondary-button project-choice"><span>소스 백업 ZIP 가져오기</span><small>이 앱에서 저장한 소스 백업 복원</small></button><button id="ad-github" class="secondary-button project-choice"><span>GitHub에서 가져오기</span><small>선택 기능 · HTTPS 저장소 복제</small></button></div>
+    <h3>개발 진행</h3>
+    <div class="build-actions"><button id="ad-setup" class="secondary-button">개발 환경 준비</button><button id="ad-workflow" class="secondary-button">개발 단계 · 자동 검증 · 매뉴얼</button><button id="ad-build" class="primary-button">APK 만들기 · 저장</button><button id="ad-git" class="secondary-button">변경 저장 · GitHub 업로드</button></div>
+    <p class="muted">프로젝트 준비 → 코드 작성 → 환경 확인 → 빌드·검증 → APK 저장·설치 순서로 진행합니다. 기존 작업 폴더 연결도 계속 사용할 수 있습니다.</p>
+  </dialog>
+  <dialog id="android-git-dialog" aria-labelledby="ag-title">
+    <div class="dialog-head"><h2 id="ag-title">프로젝트 Git</h2><button class="icon-button" data-close="android-git-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div>
+    <p id="ag-auth-help">공개 GitHub 저장소는 로그인 없이 가져올 수 있습니다. 비공개 저장소·업로드에는 이 앱의 Git 인증이 필요합니다. ChatGPT의 GitHub 연결은 자동 공유되지 않습니다. 주소에 토큰을 넣지 마십시오.</p>
+    <form id="ag-clone-form" hidden>
+      <label>GitHub 저장소 주소<input id="ag-url" class="text-input" type="url" placeholder="https://github.com/owner/repository" required autocomplete="off"></label>
+      <label>프로젝트 이름<input id="ag-name" class="text-input" maxlength="80" required></label><label>내부 폴더 이름<input id="ag-folder" class="text-input" maxlength="80" required placeholder="my-project"></label>
+      <p class="muted">기본 브랜치의 최신 이력을 가져옵니다. 기존 폴더는 덮어쓰지 않으며, 가져온 코드와 빌드 스크립트는 실행 전에 확인하십시오.</p>
+      <button id="ag-clone" class="primary-button" type="submit">내부 공간에 가져오기</button>
+    </form>
+    <section id="ag-repository" hidden>
+      <p id="ag-project"></p><p id="ag-remote" class="muted"></p>
+      <div class="build-actions"><button id="ag-refresh" class="secondary-button">변경 목록 새로고침</button><button id="ag-review" class="secondary-button">변경 내용 비교</button></div>
+      <div id="ag-files" class="git-files"></div>
+      <p class="muted">파일 내용을 확인한 뒤 저장할 파일만 선택하십시오. 인증정보·개인 키·개인정보가 있는 파일은 선택하지 마십시오. 이름 변경·충돌 해결은 터미널을 사용하십시오.</p>
+      <label>커밋 메시지<input id="ag-message" class="text-input" maxlength="500" autocomplete="off"></label>
+      <div class="build-actions"><button id="ag-commit" class="secondary-button">선택 파일 커밋</button><button id="ag-push" class="primary-button">GitHub에 업로드</button></div>
+      <p class="muted">커밋은 기기에 저장합니다. 업로드는 현재 브랜치의 커밋을 GitHub에 전송하며, 작업 중인 미커밋 변경은 전송하지 않습니다.</p>
+    </section>
+    <div class="operation-status" id="ag-status-row" aria-busy="false"><span id="ag-spinner" class="operation-spinner" aria-hidden="true" hidden></span><p id="ag-status" role="status" aria-live="polite"></p></div>
+    <details><summary>Git 인증 · 사용 안내</summary><p>이 화면은 Android 번들 Git을 사용합니다. Linux 터미널의 전역 인증 설정과는 별개입니다. 인증 설정은 Linux 사용을 끈 상태에서 이 앱의 터미널로 진행하고, 완료 후 Linux를 다시 켜십시오.</p><p>이 앱의 터미널에서 Git 사용자 이름·이메일과 인증을 설정해야 합니다. 이 화면은 비밀번호나 토큰을 받지 않습니다. 인증 실패 시 커밋과 소스는 유지됩니다. 강제 푸시·이력 삭제·자동 업로드는 하지 않습니다. Git LFS와 사용자 Git 훅은 이 화면에서 실행하지 않습니다.</p><p>새 프로젝트에 Git이 없으면 먼저 초기화하고, GitHub에 만든 저장소를 origin으로 연결하십시오. 아래 주소와 이름·이메일은 본인 설정으로 바꾸십시오.</p><code>git init -b main</code><br><code>git remote add origin https://github.com/owner/repository.git</code><br><code>git config user.name "Your Name"</code><br><code>git config user.email "your-email"</code><p>일반 소스 ZIP은 기존 폴더에서 압축을 푼 뒤 ‘폴더에서 가져오기’를 사용하십시오. 소스 백업 ZIP 가져오기는 이 앱의 백업 형식 전용입니다.</p></details>
+  </dialog>
+
+  <dialog id="tool-menu-dialog" class="sheet-dialog" aria-labelledby="tool-menu-title"><button type="button" class="sheet-grip" data-close="tool-menu-dialog" aria-label="아래로 끌거나 눌러서 닫기"><span aria-hidden="true"></span></button><div class="dialog-head"><h2 id="tool-menu-title">도구</h2><button class="icon-button" data-close="tool-menu-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div><div id="tool-menu" class="project-actions"><button id="show-android-start" class="nav-button"><svg><use href="#i-code"/></svg>Android 개발 시작</button><button id="show-android-setup" class="nav-button"><svg><use href="#i-settings"/></svg>Android 개발 환경 설정</button><button id="show-workflow" class="nav-button"><svg><use href="#i-code"/></svg>개발 진행 · 매뉴얼</button><button id="show-build" class="nav-button"><svg><use href="#i-code"/></svg>Android 빌드</button><button id="show-terminal" class="nav-button"><svg><use href="#i-code"/></svg>터미널</button><button id="show-tools-panel" class="nav-button"><svg><use href="#i-settings"/></svg>플러그인 · 스킬 · MCP</button><button id="show-changes" class="nav-button"><svg><use href="#i-edit"/></svg>변경 사항</button><button id="show-recovery" class="nav-button"><svg><use href="#i-clock"/></svg>복구 사본</button></div></dialog>
+  <dialog id="login-dialog"><div class="dialog-head"><h2>ChatGPT 계정 연결</h2><button class="icon-button" data-close="login-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div><p>아래 코드를 복사한 뒤 브라우저에서 로그인하세요.</p><button id="device-code" class="device-code" aria-label="로그인 코드 복사">연결 준비 중</button><button id="open-login" class="primary-button" disabled>브라우저에서 로그인</button><p id="login-help" class="muted">로그인이 완료되면 이 화면으로 돌아오세요.</p><button id="report-login-open" class="secondary-button" hidden>오류 정보 보내기</button></dialog>
+  <dialog id="settings-dialog" class="settings-dialog"><button type="button" class="sheet-grip" data-close="settings-dialog" aria-label="아래로 끌거나 눌러서 닫기"><span aria-hidden="true"></span></button><div class="dialog-head"><div><p class="eyebrow">Mobile Codex</p><h2>설정</h2></div><button class="icon-button" data-close="settings-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div><div class="settings-layout"><nav class="settings-nav" aria-label="설정 분류"><button class="active" data-settings-tab="general">일반</button><button data-settings-tab="personal">맞춤 지침</button><button data-settings-tab="account">계정</button><button data-settings-tab="tools">도구</button><button data-settings-tab="advanced">고급</button><button data-settings-tab="updates">업데이트</button></nav><div class="settings-content"><section class="settings-section" data-settings-panel="general"><h3>일반</h3><div class="settings-row"><span><strong>언어</strong><small>앱 화면의 언어를 선택합니다. 대화 내용과 파일은 바뀌지 않습니다.</small></span><select id="language" aria-label="언어"><option value="system">기기 설정 따르기</option><option value="en">English</option><option value="ko">한국어</option></select></div><div class="settings-row"><span><strong>테마</strong><small>시스템 설정을 따르거나 직접 고릅니다.</small></span><select id="theme"><option value="system">시스템</option><option value="light">라이트</option><option value="dark">다크</option></select></div><div class="settings-row"><span><strong id="chat-icons-label">캐릭터 팩 사용</strong><small id="chat-icons-description">끄면 시작 화면·답변·작업 상태의 캐릭터를 숨깁니다.</small></span><label class="toggle-switch"><input id="chat-icons-toggle" type="checkbox" role="switch" aria-labelledby="chat-icons-label" aria-describedby="chat-icons-description"><span class="toggle-track" aria-hidden="true"></span></label></div></section><section class="settings-section" data-settings-panel="personal" hidden><h3>개인 맞춤 지침</h3><p class="muted">답변 언어, 말투, 작업 방식 등 모든 대화에 적용할 기본 지침을 작성하세요. 프로젝트의 AGENTS.md와 함께 사용됩니다.</p><label for="instructions-editor">Codex가 알아야 할 지침</label><textarea id="instructions-editor" class="instructions-editor" rows="8" placeholder="예: 한국어로 답변하고, 수정 전에 관련 코드를 확인해 주세요." disabled></textarea><p id="instructions-path" class="muted"></p><p id="instructions-status" role="status" class="muted"></p><div class="instructions-actions"><button id="instructions-reload" class="secondary-button">다시 불러오기</button><button id="instructions-save" class="primary-button" disabled>저장</button></div><p class="muted">앱의 .codex 폴더에 저장하며 다음 요청부터 적용합니다. 비워서 저장하면 현재 파일의 지침을 해제합니다. override를 비우면 기본 AGENTS.md가 다시 적용됩니다.</p></section><section class="settings-section" data-settings-panel="account" hidden><h3>계정과 사용 한도</h3><div class="settings-row"><span><strong>실행 상태</strong><small id="settings-status">연결 종료</small></span><span id="settings-indicator" class="status-pill">확인 중</span></div><section class="devtools-card account-profiles-card" aria-labelledby="accounts-title"><div class="card-heading"><span><strong id="accounts-title">Codex · ChatGPT</strong></span><button id="account-add" class="secondary-button">ChatGPT 계정 추가</button></div><div id="accounts-list" class="accounts-list" aria-live="polite"></div></section><section class="devtools-card usage-card" aria-labelledby="usage-title"><div class="card-heading"><span><strong id="usage-title">사용 한도</strong><small id="usage-status" role="status">로그인 후 사용 한도를 조회할 수 있습니다.</small></span><button id="usage-refresh" class="secondary-button">새로고침</button></div><div id="usage-limits" class="usage-limits" aria-live="polite"></div></section><p id="pending-deletions" class="muted" role="status" hidden></p><div class="account-runtime-actions"><button id="restart" class="secondary-button">Codex 시작 / 다시 연결</button><button id="engine-stop" class="secondary-button subtle-danger">실행 종료</button><button id="logout" class="secondary-button">현재 계정 로그아웃</button></div></section><section class="settings-section" data-settings-panel="tools" hidden><h3>도구</h3><section class="devtools-card" aria-labelledby="phone-title"><strong id="phone-title">휴대폰 제어</strong><p id="phone-status" class="muted" role="status">접근성 연결 상태를 확인하는 중입니다.</p><p class="muted">요청한 작업을 위해 다른 앱의 화면을 읽고 탭·입력·스크롤합니다. 화면 내용과 이미지는 AI 서비스로 전송되며 Codex 기록에 남을 수 있습니다.</p><div class="phone-actions"><button id="phone-settings" class="secondary-button">접근성 설정 열기</button><button id="floating-chat" class="secondary-button">플로팅 대화 열기</button><button id="phone-enable" class="primary-button" disabled>휴대폰 제어 켜기</button><button id="phone-disable" class="secondary-button subtle-danger" hidden>제어 중지</button></div><p id="phone-thread-note" class="muted" hidden>이전 버전의 대화에는 휴대폰 도구가 없습니다. 새 대화를 시작해 주세요.</p><p id="phone-screenshot-note" class="muted"></p></section><p id="storage-status" class="muted"></p><button id="storage-access" class="secondary-button">기기 파일 접근 허용</button><section class="devtools-card" aria-labelledby="devtools-title"><strong id="devtools-title">번들 개발 도구</strong><p id="devtools-status" class="muted" role="status">개발 도구 정보를 확인하는 중입니다.</p><div id="devtools-versions" class="devtools-versions" aria-label="개발 도구 버전"></div><button id="devtools-check" class="secondary-button">도구 실행 확인</button><pre id="devtools-output" class="console devtools-output" aria-live="polite" hidden></pre><p class="muted">Python·Node.js·Git을 포함합니다. npm·pip 확장은 Android용 네이티브 빌드가 필요할 수 있으며, Git HTTPS 인증 정보는 직접 입력해야 합니다.</p></section></section><section class="settings-section" data-settings-panel="advanced" hidden><h3>고급</h3><button id="report-open" class="secondary-button" hidden>오류 정보 보내기</button><p class="muted">최근 오류의 제한된 진단 정보를 확인한 뒤 공개 전송할 수 있습니다.</p><button id="edit-config" class="secondary-button">Codex 설정 편집</button><p class="muted">설정을 저장하면 실행 엔진을 다시 시작합니다.</p></section><section class="settings-section" data-settings-panel="updates" hidden><h3>앱 업데이트</h3><p id="update-current" class="muted">현재 버전 확인 중…</p><label for="update-repository">배포 저장소</label><input id="update-repository" class="text-input" value="nokryong/mobile-codex" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="update-source-note"><p id="update-source-note" class="muted">공개 GitHub 저장소의 ARM64 릴리스를 확인합니다.</p><label class="update-prereleases"><input id="update-prereleases" type="checkbox" checked> 시험판 포함</label><div class="update-actions"><button id="update-check" class="secondary-button">업데이트 확인</button><button id="update-cancel" class="secondary-button" hidden>취소</button></div><p id="update-status" class="muted" role="status" aria-live="polite"></p><progress id="update-progress" max="100" value="0" aria-label="업데이트 다운로드 진행률" hidden></progress><div id="update-release" hidden><strong id="update-version"></strong><p id="update-size" class="muted"></p><pre id="update-notes" class="update-notes"></pre></div><div class="update-actions"><button id="update-download" class="primary-button" hidden>다운로드</button><button id="update-permission" class="secondary-button" hidden>이 앱의 설치 허용</button><button id="update-install" class="primary-button" hidden>업데이트 설치</button><button id="update-clear" class="secondary-button" hidden>다운로드 삭제</button></div><p class="muted">설치는 Android 확인 화면에서 진행합니다. 현재 앱과 호환되는 서명의 새 버전만 설치할 수 있습니다.</p></section></div></div><p class="about">Mobile Codex · <span id="app-version">버전 확인 중</span><br>제작: nokryong<br>OpenAI 공식 앱이 아닌 개인용 클라이언트입니다.<br>Android용 Codex 포트 0.162.1-termux.1 · Apache-2.0<br>요청 처리에 사용되는 파일 내용은 AI 서비스로 전송됩니다.</p></dialog>
+  <dialog id="editor-dialog" class="editor-dialog"><div class="dialog-head"><h2 id="editor-title">파일</h2><button class="icon-button" data-close="editor-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div><textarea id="editor" spellcheck="false" aria-label="파일 내용"></textarea><div class="editor-actions"><button id="editor-rename" class="secondary-button">이름 변경</button><button id="editor-move" class="secondary-button">이동</button><button id="editor-delete" class="secondary-button danger">삭제</button><button id="editor-save" class="primary-button">저장</button></div></dialog>
+  <dialog id="input-dialog"><div class="dialog-head"><h2 id="input-title">입력</h2><button class="icon-button" data-close="input-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div><p id="input-description" class="muted"></p><input id="input-value" class="text-input" autocomplete="off" aria-labelledby="input-title" enterkeyhint="done"><button id="input-confirm" class="primary-button">계속</button></dialog>
+  <dialog id="changes-dialog" class="changes-dialog"><div class="dialog-head"><h2>변경 사항</h2><button class="icon-button" data-close="changes-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div><div class="phone-actions"><button id="changes-refresh" class="secondary-button">파일 새로고침</button><button id="changes-history" class="secondary-button">복원 사본</button></div><p id="changes-status" class="muted" role="status"></p><details><summary>현재 대화의 최근 작업 diff</summary><pre id="changes-turn-diff" class="change-diff"></pre></details><div id="changes-list"></div><section id="change-preview" hidden><h3 id="change-path"></h3><p id="change-note" class="muted"></p><div class="change-legend"><span>− 복원할 이전 내용</span><span>+ 현재 내용</span></div><pre id="change-diff" class="change-diff" tabindex="0" aria-label="파일 변경 비교"></pre><button id="change-restore" class="secondary-button subtle-danger" disabled>복원</button></section></dialog>
+  <dialog id="recovery-dialog"><div class="dialog-head"><h2>복구 사본</h2><button class="icon-button" data-close="recovery-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div><p class="muted">수정·삭제 전의 파일을 새 파일로 저장할 수 있습니다. 앱을 삭제하면 복구 사본도 삭제됩니다.</p><div id="recovery-list"></div></dialog>
+  <dialog id="build-dialog" class="wide-dialog" aria-labelledby="build-title">
+    <div class="dialog-head"><h2 id="build-title">Android 빌드</h2><button class="icon-button" data-close="build-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div>
+    <div class="build-actions"><button id="build-setup-open" class="secondary-button">개발 환경 설정</button><button id="build-workflow-open" class="primary-button">개발 진행 보기</button><button id="build-assistant-open" class="secondary-button">Android 개발 도우미</button></div>
+    <p id="build-project" class="muted"></p>
+    <p class="muted">개발자용 · 신뢰하는 프로젝트만 실행하십시오. 빌드 스크립트는 이 앱의 계정 파일에도 접근할 수 있습니다.</p>
+    <p class="muted">새 앱에는 JDK·SDK 준비가 필요합니다. Linux 안의 도구 경로를 지정하십시오. 기존 앱의 도구는 자동 공유되지 않습니다.</p>
+    <pre id="build-environment-summary" class="muted" aria-label="빌드 환경 요약"></pre>
+    <div class="build-config">
+      <label>Linux JAVA_HOME<input id="build-java-home" class="text-input" autocomplete="off" spellcheck="false"></label>
+      <label>Linux Android SDK<input id="build-sdk-root" class="text-input" autocomplete="off" spellcheck="false"></label>
+      <label>Linux ARM64 aapt2<input id="build-aapt2" class="text-input" autocomplete="off" spellcheck="false"></label>
+      <label>Gradle 작업<input id="build-task" class="text-input" autocomplete="off" spellcheck="false" placeholder=":app:assembleDebug"></label>
+    </div>
+    <div class="build-actions"><button id="build-sample-create" class="secondary-button" disabled>빈 폴더에 샘플 만들기</button></div>
+    <p class="muted">현재 폴더가 비어 있을 때만 Java 샘플을 만듭니다. 첫 빌드는 Gradle·의존성 다운로드가 필요합니다.</p>
+    <div class="build-actions"><button id="build-save" class="secondary-button" disabled>설정 저장</button><button id="build-check" class="secondary-button" disabled>환경 확인</button><button id="build-run" class="primary-button" disabled>APK 빌드</button><button id="build-refresh" class="secondary-button">APK 새로고침</button><button id="build-clone" class="secondary-button">프로젝트 복제</button><button id="build-source-export" class="secondary-button">소스 ZIP 백업</button><button id="build-history-open" class="secondary-button" disabled>최근 빌드 로그</button></div>
+    <p id="build-status" class="muted" role="status" aria-live="polite"></p>
+    <p id="build-history-summary" class="muted"></p><p id="build-history-warning" class="muted" role="status"></p>
+    <h3>현재 프로젝트 APK</h3><p id="build-artifact-warning" class="muted" role="status"></p>
+    <p id="build-artifact-basis" class="muted">수정 시각 기준 분류입니다. 같은 빌드의 산출물이라는 보증은 아닙니다. UP-TO-DATE 빌드는 이전 APK를 재사용할 수 있습니다.</p><div id="build-apks"></div>
+    <p class="muted">개발 환경 설정에서 JDK 17·SDK 35·ARM64 aapt2를 다운로드하고 실행을 확인합니다. 출처와 SDK 약관을 확인한 뒤 설치합니다.</p>
+    <div class="build-actions"><button id="build-tools-import" class="primary-button">개발 도구 다운로드·설정</button><button id="build-linux-settings" class="secondary-button">Linux 준비 화면</button><button id="build-permission" class="secondary-button">이 앱의 APK 설치 허용</button></div>
+    <p class="muted">로그와 중지는 앱 내부 터미널을 사용합니다. APK 설치는 Android 확인 화면에서 진행합니다.</p>
+  </dialog>
+  <dialog id="android-workflow-dialog" class="wide-dialog workflow-dialog" aria-labelledby="gw-title">
+    <div class="dialog-head"><h2 id="gw-title">개발 진행 도우미</h2><button class="icon-button" data-close="android-workflow-dialog" aria-label="닫기">×</button></div>
+    <p id="gw-project" class="muted"></p>
+    <nav class="workflow-tabs" aria-label="개발 도우미 화면">
+      <button id="gw-tab-stages" class="secondary-button" aria-pressed="true">개발 단계</button>
+      <button id="gw-tab-auto" class="secondary-button" aria-pressed="false">자동 검증</button>
+      <button id="gw-tab-manual" class="secondary-button" aria-pressed="false">사용 매뉴얼</button>
+    </nav>
+    <div id="gw-status-row" class="operation-status" aria-busy="false"><span id="gw-spinner" class="operation-spinner" aria-hidden="true" hidden></span><p id="gw-status" role="status" aria-live="polite"></p></div>
+    <p id="gw-warning" class="muted" role="status"></p>
+    <section id="gw-failure" class="workflow-next" hidden aria-labelledby="gw-failure-title">
+      <h3 id="gw-failure-title">검사가 멈췄을 때</h3><p id="gw-failure-text"></p>
+      <button id="gw-failure-manual" class="secondary-button">해결 방법 매뉴얼 열기</button>
+    </section>
+    <div class="build-actions"><button id="gw-refresh" class="secondary-button">진행 상태 새로고침</button><button id="gw-open-log" class="secondary-button">실행 로그 보기</button></div>
+    <section id="gw-panel-stages" aria-label="개발 단계">
+      <section class="workflow-next" aria-labelledby="gw-next-title"><h3 id="gw-next-title">다음 할 일</h3><p id="gw-next"></p><button id="gw-next-action" class="primary-button"></button></section>
+      <p id="gw-progress" class="workflow-summary"></p>
+      <p class="muted">자동 검사 결과와 사용자가 직접 확인한 항목은 별개입니다. 설치·실기 확인은 자동 통과로 표시하지 않습니다.</p>
+      <ol id="gw-steps" class="workflow-steps"></ol>
+    </section>
+    <section id="gw-panel-auto" hidden aria-label="자동 검증">
+      <h3>검증을 한 번에 실행하기</h3>
+      <p>환경 확인 → 빌드·Lint·단위 테스트 → 선택한 API 모의 검사 순서로 실행합니다. 실패·검사 미확인·중지 시 다음 단계로 넘어가지 않습니다.</p>
+      <p class="muted">프로젝트의 빌드 스크립트를 실행합니다. 신뢰하는 프로젝트에서만 시작하십시오. 소스·의존성 변경과 설치 확인은 자동으로 진행하지 않습니다.</p>
+      <label class="workflow-check"><input id="gw-include-mock" type="checkbox">Android 버전별 모의 검사 포함</label>
+      <fieldset id="gw-api-options"><legend>모의 검사 API</legend><div id="gw-api-list" class="workflow-api-list"></div></fieldset>
+      <p id="gw-mock-help" class="muted"></p>
+      <div class="build-actions"><button id="gw-prepare-mock" class="secondary-button">모의 검사 준비 열기</button><button id="gw-run" class="primary-button" disabled>자동 검증 시작</button><button id="gw-stop" class="secondary-button" disabled>자동 진행 중지</button></div>
+      <p id="gw-run-help" class="muted"></p>
+      <ol id="gw-queue" class="workflow-queue" aria-label="자동 검증 진행 순서"></ol>
+      <p class="muted">화면을 닫아도 현재 자동 진행은 이어집니다. 앱 화면이 다시 로드되면 자동 재개하지 않습니다. 프로젝트·계정 변경 시 다음 단계 실행을 중단합니다.</p>
+    </section>
+    <section id="gw-panel-manual" hidden aria-label="사용 매뉴얼"><h3>패드에서 앱을 만드는 순서</h3><div id="gw-manual"></div></section>
+  </dialog>
+  <dialog id="android-assistant-dialog" class="wide-dialog" aria-labelledby="android-assistant-title">
+    <div class="dialog-head"><h2 id="android-assistant-title">Android 개발 도우미</h2><button class="icon-button" data-close="android-assistant-dialog" aria-label="닫기">×</button></div>
+    <button id="aa-workflow-open" class="secondary-button">개발 진행 보기</button>
+    <p class="muted">정적 진단은 실행 검증이 아닙니다. 다른 Android 버전은 실제 실행 결과를 가져오기 전까지 미검증입니다.</p>
+    <button id="aa-refresh" class="secondary-button">프로젝트 다시 검사</button><p id="aa-status" role="status" aria-live="polite"></p>
+    <section><h3>프로젝트 진단</h3><div id="aa-diagnostics"></div><div id="aa-issues"></div></section>
+    <section><h3>호환성 변경 미리보기</h3><div class="aa-grid"><label>최소 Android API<input id="aa-sdk-min" type="number" min="16" max="100" class="text-input"></label><label>대상 Android API<input id="aa-sdk-target" type="number" min="16" max="100" class="text-input"></label><label>컴파일 Android API<input id="aa-sdk-compile" type="number" min="16" max="100" class="text-input"></label></div>
+    <button id="aa-sdk-preview" class="secondary-button">SDK 변경 미리보기</button><label>라이브러리<select id="aa-library" class="text-input"></select></label><button id="aa-library-preview" class="secondary-button">라이브러리 추가 미리보기</button>
+    <div id="aa-preview"></div><button id="aa-apply" class="primary-button" disabled>미리본 변경 적용</button></section>
+    <section><h3>검증 실행</h3><p id="aa-execution-help" role="status" aria-live="polite"></p><p class="muted">프로젝트의 빌드 스크립트를 실행합니다. 현재 기기의 결과는 다른 Android 버전의 통과를 의미하지 않습니다.</p><div class="build-actions"><button id="aa-local" class="secondary-button">빌드·Lint·단위 테스트 실행</button><button id="aa-devices" class="secondary-button">연결 기기 목록</button><button id="aa-connected" class="secondary-button">연결 기기 테스트 실행</button></div></section>
+    <section><h3>Android 버전별 모의 검사</h3><p class="muted">Robolectric으로 생성한 기본 모의 테스트를 실행합니다. 전체 Android OS 실행이나 앱 전체 호환성 검사가 아닙니다.</p><label>모의 검사 API<select id="aa-mock-api" class="text-input"><option value="29">29</option><option value="30">30</option><option value="31">31</option><option value="32">32</option><option value="33">33</option><option value="34">34</option><option value="35">35</option></select></label><button id="aa-simulation-preview" class="secondary-button">모의 검사 준비 미리보기</button><div id="aa-simulation-preview-output"></div><button id="aa-simulation-apply" class="secondary-button" disabled>미리본 모의 검사 준비 적용</button><button id="aa-mock" class="primary-button">모의 검사 실행</button><div id="aa-simulation-limitations"></div><div id="aa-mock-matrix"></div></section>
+    <section><h3>실험용 에뮬레이터 준비 확인</h3><p class="muted">QEMU 명령 존재 여부와 TCG 지원만 확인합니다. Android 부팅이나 OS 테스트가 아닙니다.</p><button id="aa-emulator-probe" class="secondary-button">실험용 에뮬레이터 준비 확인</button></section>
+    <section><h3>Android 버전별 검증</h3><label>검증할 API 번호<input id="aa-apis" class="text-input" placeholder="29, 35, 36" inputmode="text"></label><button id="aa-save-matrix" class="secondary-button">검증 대상 저장</button><div id="aa-matrix"></div><details><summary>검증 기록</summary><pre id="aa-records"></pre></details></section>
+    <details><summary>외부 기기·클라우드 테스트</summary><p class="muted">외부 테스트를 직접 실행하면 선택한 기기에 APK가 설치되거나 클라우드 요금이 발생할 수 있습니다. 인증 정보는 이 화면에 입력하지 마십시오.</p><div class="aa-grid">
+    <label>ADB 기기 일련번호<input id="aa-serial" class="text-input" autocomplete="off"></label><label>클라우드 기기 모델<input id="aa-model" class="text-input" autocomplete="off"></label><label>외부 Android API<input id="aa-device-api" class="text-input" inputmode="numeric"></label><label>앱 APK 경로<input id="aa-app-apk" class="text-input" autocomplete="off"></label><label>테스트 APK 경로<input id="aa-test-apk" class="text-input" autocomplete="off"></label><label>테스트 실행기<input id="aa-runner" class="text-input" autocomplete="off"></label><label>클라우드 프로젝트<input id="aa-cloud-project" class="text-input" autocomplete="off"></label></div>
+    <div class="build-actions"><button id="aa-adb" class="secondary-button">선택한 ADB 기기에 설치·테스트</button><button id="aa-cloud" class="secondary-button">선택한 클라우드 테스트 실행</button><button id="aa-plan" class="secondary-button">외부 테스트 계획 생성</button></div><label>외부 테스트 계획<textarea id="aa-plan-output" class="text-input" rows="8" readonly spellcheck="false"></textarea></label><button id="aa-plan-select" class="secondary-button">계획 텍스트 선택</button>
+    <label>외부 검증 결과 JSON<textarea id="aa-evidence" class="text-input" rows="7" spellcheck="false"></textarea></label><button id="aa-import" class="secondary-button">결과 가져오기</button><p class="muted">가져온 결과는 외부에서 제공한 증거입니다. 이 앱이 직접 실행한 결과와 구분합니다.</p></details>
+  </dialog>
+  <dialog id="android-project-dialog" class="wide-dialog" aria-labelledby="android-project-title">
+    <div class="dialog-head"><h2 id="android-project-title">Android 앱 만들기</h2><button class="icon-button" data-close="android-project-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div>
+    <form id="android-project-form">
+      <label>템플릿<select id="android-project-template" class="text-input"><option value="java">Java · 기본</option><option value="kotlin">Kotlin</option><option value="compose">Kotlin · Compose</option></select></label>
+      <p class="muted">첫 빌드는 인터넷 다운로드가 필요합니다. 앱 생성 후 APK 빌드를 직접 실행하십시오.</p>
+      <label>앱 이름<input id="android-project-name" class="text-input" maxlength="80" required placeholder="나의 앱"></label>
+      <label>패키지명<input id="android-project-package" class="text-input" maxlength="150" required value="com.example.myapp" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+      <label>프로젝트 폴더 이름<input id="android-project-folder" class="text-input" maxlength="64" required value="my-app"></label>
+      <p class="muted">앱 내부 android-projects 폴더에 저장합니다. 앱을 제거하면 내부 프로젝트도 삭제됩니다. 기존 폴더는 덮어쓰지 않습니다.</p>
+      <p id="android-project-error" role="status"></p>
+      <button id="android-project-submit" class="primary-button" type="submit">만들고 열기</button>
+    </form>
+  </dialog>
+  <dialog id="build-clone-dialog" class="wide-dialog" aria-labelledby="build-clone-title">
+    <div class="dialog-head"><h2 id="build-clone-title">프로젝트 복제</h2><button class="icon-button" data-close="build-clone-dialog" aria-label="닫기">×</button></div>
+    <p class="muted">현재 소스를 새 내부 폴더에 복제합니다. 빌드·캐시는 제외합니다. 패키지명·버전은 유지하므로 같은 패키지 APK 설치 시 기존 앱을 업데이트할 수 있습니다.</p>
+    <form id="build-clone-form"><label>새 프로젝트 표시 이름<input id="build-clone-name" class="text-input" maxlength="80" required></label><label>새 폴더 이름<input id="build-clone-folder" class="text-input" maxlength="64" required></label><p id="build-clone-error" class="muted" role="status"></p><button id="build-clone-submit" class="primary-button" type="submit">복제하고 열기</button></form>
+  </dialog>
+  <dialog id="build-metadata-dialog" class="wide-dialog" aria-labelledby="build-metadata-title">
+    <div class="dialog-head"><h2 id="build-metadata-title">APK 정보</h2><button class="icon-button" data-close="build-metadata-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div>
+    <pre id="build-metadata-output" class="console"></pre>
+    <p class="muted">선택 파일의 정보입니다. 최근 빌드에서 생성된 파일이라는 보증은 아닙니다. 설치 여부는 Android 화면에서 확인하십시오.</p>
+  </dialog>
+  <dialog id="build-history-dialog" class="wide-dialog" aria-labelledby="build-history-title">
+    <div class="dialog-head"><h2 id="build-history-title">최근 빌드 로그</h2><button class="icon-button" data-close="build-history-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div>
+    <p id="build-history-detail" class="muted"></p><p id="build-history-note" class="muted" role="status"></p>
+    <pre id="build-history-output" class="console" tabindex="0" aria-label="저장된 빌드 로그"></pre>
+    <button id="build-error-preview" class="primary-button" type="button" disabled>로그로 수정 요청</button>
+  </dialog>
+  <dialog id="build-error-dialog" class="wide-dialog" aria-labelledby="build-error-title">
+    <div class="dialog-head"><h2 id="build-error-title">빌드 오류 수정 요청</h2><button class="icon-button" data-close="build-error-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div>
+    <p id="build-error-detail" class="muted"></p>
+    <p class="muted">전송할 내용을 확인하고 편집하십시오. 알려진 인증 정보 형식은 가리지만 모든 비밀 정보를 찾아내지는 못합니다. 초안에 추가한 뒤 직접 전송하십시오.</p>
+    <textarea id="build-error-text" class="text-input" rows="12" maxlength="20500" aria-label="수정 요청 내용" spellcheck="false"></textarea>
+    <button id="build-error-add" class="primary-button" type="button">대화 초안에 추가</button>
+  </dialog>
+  <dialog id="terminal-dialog" class="wide-dialog"><div class="dialog-head"><h2>터미널</h2><button class="icon-button" data-close="terminal-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div><p id="terminal-cwd" class="muted"></p><p id="terminal-tools-note" class="muted"></p><pre id="terminal-output" class="console" aria-live="polite"></pre><p id="terminal-status" class="muted" role="status"></p><button id="terminal-build-results" class="primary-button" type="button" hidden>APK 결과 보기</button><form id="terminal-form" class="terminal-form"><input id="terminal-command" class="text-input" placeholder="명령 입력" aria-label="셸 명령" autocomplete="off" autocapitalize="off" spellcheck="false"><button id="terminal-submit" class="primary-button" type="submit">실행</button><button class="secondary-button" id="terminal-stop" type="button" disabled>중지</button></form><p class="muted">기기에 설치된 명령을 Android 앱 권한으로 실행합니다.</p></dialog>
+  <dialog id="tools-dialog" class="wide-dialog"><div class="dialog-head"><h2>플러그인 · 스킬 · MCP</h2><button class="icon-button" data-close="tools-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div><div class="toolbar"><button id="refresh-tools" class="secondary-button">새로고침</button><button id="marketplace-add" class="secondary-button">마켓플레이스 추가</button><button id="skill-import" class="secondary-button">스킬 가져오기</button><button id="tools-config" class="secondary-button">서버 설정</button></div><div id="tools-list"></div></dialog>
+  <dialog id="config-dialog" class="editor-dialog"><div class="dialog-head"><h2>config.toml</h2><button class="icon-button" data-close="config-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div><p class="muted">Codex의 모델, 기능, 스킬, MCP 등 원래 설정을 사용할 수 있습니다. 저장 후 실행 엔진을 다시 시작합니다.</p><textarea id="config-editor" spellcheck="false" aria-label="Codex TOML 설정"></textarea><div class="editor-actions"><button id="config-save" class="primary-button">저장하고 다시 시작</button></div></dialog>
+  <dialog id="activity-dialog" class="wide-dialog"><div class="dialog-head"><h2>작업 기록</h2><button class="icon-button" data-close="activity-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div><div id="event-log"></div></dialog>
+  <dialog id="request-dialog" class="wide-dialog"><div class="dialog-head"><h2 id="request-title">Codex 요청</h2></div><p id="request-reason"></p><div id="request-fields"></div><details><summary>요청 상세</summary><pre id="request-detail" class="console"></pre></details><div id="request-actions" class="editor-actions"></div></dialog>
+  <dialog id="image-dialog" class="image-dialog" aria-labelledby="image-title"><div class="dialog-head"><h2 id="image-title">이미지</h2><button class="icon-button" data-close="image-dialog" aria-label="닫기"><svg><use href="#i-close"/></svg></button></div><div id="image-stage" class="image-stage"><img id="image-preview" alt="이미지"></div><div id="image-thumbnails" class="image-thumbnails" aria-label="이미지 목록" hidden></div><div class="image-viewer-bottom"><div id="image-navigation" class="image-navigation" hidden><button id="image-prev" class="icon-button" aria-label="이전 이미지"><svg><use href="#i-back"/></svg></button><span id="image-counter" role="status"></span><button id="image-next" class="icon-button" aria-label="다음 이미지"><svg class="next-arrow"><use href="#i-back"/></svg></button></div><div class="editor-actions"><button id="image-zoom" class="secondary-button" aria-pressed="false">원본 크기</button><button id="image-save" class="primary-button">기기에 저장</button></div></div></dialog>
+  <button id="phone-stop-banner" class="phone-stop-banner" type="button" hidden>휴대폰 제어 켜짐 · 중지</button>
+  <dialog id="report-dialog" aria-labelledby="report-title"><div class="dialog-head"><h2 id="report-title">오류 정보 보내기</h2></div><p>아래 진단 정보가 공개 GitHub 이슈에 등록됩니다. 누구나 볼 수 있습니다.</p><p class="muted">계정·대화·파일·경로·원본 로그는 포함하지 않습니다. 기기 정보는 제조사와 성능 범주만 포함합니다. 전송 시 서버는 도배 방지를 위해 네트워크 주소를 일시 처리합니다. 같은 오류는 기존 이슈에 모일 수 있습니다.</p><pre id="report-payload" class="console report-payload" aria-label="전송할 진단 정보"></pre><p id="report-status" class="muted" role="status" aria-live="polite"></p><div class="report-actions"><button id="report-cancel" data-close="report-dialog" class="secondary-button">취소 / 닫기</button><button id="report-send" class="primary-button" disabled>공개 GitHub에 전송</button><button id="report-result" class="secondary-button" hidden>등록된 이슈 열기</button></div></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <section id="reset-credits" class="reset-credits" aria-labelledby="reset-credits-title" aria-live="polite" hidden></section>
+  <dialog id="live-dialog" class="live-dialog" aria-labelledby="live-title">
+    <header class="live-head"><button id="live-settings-back" class="icon-button" aria-label="돌아가기" hidden><svg><use href="#i-back"/></svg></button><h2 id="live-title">Codex Live</h2><button id="live-settings-open" class="icon-button" aria-label="음성 설정"><svg><use href="#i-settings"/></svg></button></header>
+    <section id="live-conversation" class="live-conversation">
+      <div class="live-orb-stage"><div id="live-orb" class="live-orb" aria-hidden="true"></div></div>
+      <p id="live-status" class="live-status" role="status"></p>
+      <div id="live-task" class="live-task" hidden><span>Codex 작업 중</span><button id="live-task-stop" class="secondary-button">작업 중지</button></div>
+      <button id="live-retry" class="secondary-button" hidden>다시 연결</button>
+      <div class="live-captions"><p id="live-caption-user"></p><p id="live-caption-assistant"></p></div>
+      <div class="live-controls"><form id="live-text-form" class="live-text-form"><input id="live-text" aria-label="Codex에게 메시지" placeholder="Codex에게 메시지" autocomplete="off"><button id="live-text-send" class="icon-button" aria-label="보내기" disabled><svg><use href="#i-send"/></svg></button></form><button id="live-mute" class="icon-button" aria-label="마이크 끄기" aria-pressed="false"><svg><use href="#i-mic"/></svg></button><button id="live-end" data-close="live-dialog" class="icon-button" aria-label="음성 대화 종료"><svg><use href="#i-close"/></svg></button></div>
+    </section>
+    <section id="live-settings-panel" class="live-settings-panel" hidden>
+      <div class="live-setting"><span>모델</span><strong>Live</strong></div>
+      <details id="live-voice-picker" class="live-voice-picker">
+        <summary id="live-voice-toggle"><span>음성</span><span class="live-voice-current"><span id="live-voice-name"></span><svg><use href="#i-down"/></svg></span></summary>
+        <div id="live-voice-list" class="live-voice-list" role="radiogroup" aria-label="음성"></div>
+      </details>
+      <select id="live-voice" hidden aria-hidden="true" tabindex="-1"></select>
+      <label class="live-setting"><span>언어</span><select id="live-language" aria-label="언어"><option value="auto">자동</option><option value="ko">한국어</option><option value="en">English</option></select></label>
+      <button id="live-settings-apply" class="primary-button">적용</button>
+    </section>
+  </dialog>
+</body>
+</html>

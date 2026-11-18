@@ -1,0 +1,69 @@
+package dev.mobilecodex.app;
+
+import android.app.Application;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.Intent;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowNotificationManager;
+import static org.junit.Assert.*;
+import static org.robolectric.Shadows.shadowOf;
+
+@RunWith(RobolectricTestRunner.class)
+@org.robolectric.annotation.ConscryptMode(org.robolectric.annotation.ConscryptMode.Mode.OFF)
+@Config(sdk = 32, application = Application.class)
+public class CodexNotificationReceiverTest {
+    private Context context;
+    private NotificationManager manager;
+
+    @Before public void before() {
+        context = RuntimeEnvironment.getApplication();
+        manager = context.getSystemService(NotificationManager.class);
+        manager.cancelAll();
+        context.getSharedPreferences("notifications", 0).edit().clear().commit();
+    }
+
+    @Test public void explicitTaskBroadcastPostsNotificationForVisibleConversation() {
+        context.getSharedPreferences("notifications", 0).edit()
+            .putBoolean("enabled", true).putBoolean("foreground", true)
+            .putString("visibleThread", "thread-one").commit();
+        Intent intent = Engine.taskNotificationIntent(context, "completed", "답변 완료",
+            "Codex가 작업을 마쳤습니다.", "thread-one", "");
+
+        assertEquals(CodexNotificationReceiver.class.getName(), intent.getComponent().getClassName());
+        context.sendBroadcast(intent);
+        shadowOf(android.os.Looper.getMainLooper()).idle();
+
+        ShadowNotificationManager notifications = shadowOf(manager);
+        assertEquals(1, notifications.size());
+        assertEquals(NotificationManager.IMPORTANCE_HIGH,
+            manager.getNotificationChannel(CodexNotificationReceiver.CHANNEL).getImportance());
+    }
+
+    @Test public void disabledTaskNotificationsStaySilent() {
+        context.getSharedPreferences("notifications", 0).edit().putBoolean("enabled", false).commit();
+        new CodexNotificationReceiver().onReceive(context,
+            new Intent(CodexNotificationReceiver.ACTION).putExtra("kind", "completed")
+                .putExtra("threadId", "thread-one").putExtra("approvalId", ""));
+        assertEquals(0, shadowOf(manager).size());
+    }
+    @Test public void fallbackTitleUsesForkApplicationName() {
+        new CodexNotificationReceiver().onReceive(context,
+            new Intent(CodexNotificationReceiver.ACTION).putExtra("kind", "completed")
+                .putExtra("threadId", "thread-brand").putExtra("approvalId", ""));
+        assertEquals("Mobile Codex for APK", shadowOf(manager).getAllNotifications().get(0)
+            .extras.getCharSequence(android.app.Notification.EXTRA_TITLE).toString());
+    }
+
+    @Test public void runtimeTitleUsesForkApplicationName() {
+        EngineService service = org.robolectric.Robolectric.buildService(EngineService.class).create().get();
+        assertEquals("Mobile Codex for APK", shadowOf(service).getLastForegroundNotification()
+            .extras.getCharSequence(android.app.Notification.EXTRA_TITLE).toString());
+    }
+
+}

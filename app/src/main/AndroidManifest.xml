@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="29" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29" />
+    <queries><intent><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent><intent><action android:name="android.speech.RecognitionService" /></intent></queries>
+    <application
+        android:name=".MobileCodexApp"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="false"
+        android:label="Mobile Codex for APK"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:theme="@style/AppTheme"
+        android:supportsRtl="true">
+        <provider android:name=".UpdateFileProvider" android:authorities="${applicationId}.updates"
+            android:exported="false" android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/update_paths" />
+        </provider>
+        <provider android:name=".AttachmentFileProvider" android:authorities="${applicationId}.proattachments"
+            android:exported="false" android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/pro_attachment_paths" />
+        </provider>
+        <provider android:name=".BuildApkFileProvider" android:authorities="${applicationId}.buildapks"
+            android:exported="false" android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/build_apk_paths" />
+        </provider>
+        <activity android:name=".MainActivity" android:exported="true"
+            android:launchMode="singleTop"
+            android:enableOnBackInvokedCallback="true" tools:targetApi="33"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout|uiMode"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <receiver android:name=".CodexNotificationReceiver" android:exported="false" />
+        <receiver android:name=".UsageWidgetProvider$Codex" android:exported="false" android:label="@string/codex_usage_widget">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/codex_usage_widget" />
+        </receiver>
+        <receiver android:name=".UsageWidgetProvider$Claude" android:exported="false" android:label="@string/claude_usage_widget">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/claude_usage_widget" />
+        </receiver>
+        <receiver android:name=".UsageWidgetProvider$Gemini" android:exported="false" android:label="@string/gemini_usage_widget">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/gemini_usage_widget" />
+        </receiver>
+        <service android:name=".UsageWidgetJobService" android:permission="android.permission.BIND_JOB_SERVICE" android:exported="true" />
+        <activity android:name=".VoiceInputActivity" android:exported="false"
+            android:excludeFromRecents="true" android:taskAffinity="" android:enableOnBackInvokedCallback="true" tools:targetApi="33" android:theme="@android:style/Theme.Material.Light.Dialog.NoActionBar" />
+        <service android:name=".PhoneUseService" android:exported="true"
+            android:label="@string/phone_use_label" android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter><action android:name="android.accessibilityservice.AccessibilityService" /></intent-filter>
+            <meta-data android:name="android.accessibilityservice" android:resource="@xml/phone_use_service" />
+        </service>
+        <service android:name=".EngineService" android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="User-initiated on-device AI file assistant, command execution, optional Linux installation and interactive account sign-in" />
+        </service>
+        <service android:name=".LiveAudioService" android:exported="false"
+            android:foregroundServiceType="microphone|mediaPlayback" />
+    </application>
+</manifest>

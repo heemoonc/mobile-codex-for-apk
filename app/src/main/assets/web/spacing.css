@@ -1,0 +1,119 @@
+/* Viewport layout for Mobile Codex.
+   Breakpoints: tablet ≤1100px, phone ≤760px, narrow phone ≤420px / ≤360px, short (keyboard/landscape) ≤450px tall.
+   Values come from visual-system.css tokens; components are defined in app.css. */
+
+/* ---------- Tablet ---------- */
+@media (max-width: 1100px) {
+  :root { --sidebar-width: 244px; --gutter: var(--s-5); }
+}
+@media (min-width: 761px) and (max-width: 1100px) {
+  .file-panel { position: absolute; inset: 0 0 0 auto; z-index: 15; width: min(360px, 60vw); box-shadow: var(--shadow-pop); border-left: 0; }
+}
+
+/* ---------- Phone ---------- */
+@media (max-width: 760px) {
+  :root { --gutter: var(--s-4); --header-height: 52px; }
+
+  .sidebar {
+    position: fixed; top: 0; left: 0; bottom: auto; z-index: 30;
+    width: min(300px, calc(100% - 48px)); height: var(--app-height, 100%);
+    margin: 0 !important; transform: translateX(-100%);
+    transition: transform var(--normal) var(--ease);
+  }
+  .sidebar-open .sidebar { transform: translateX(0); box-shadow: 0 0 48px rgba(0, 0, 0, .18); }
+  .sidebar-top { padding-left: var(--s-4); }
+  .session, .project-button, .nav-button { font-size: var(--fs-base); }
+
+  .topbar { padding: 0 var(--s-2); }
+  .topbar-left > .sidebar-toggle { display: inline-flex; margin-left: 0; }
+  .topbar-divider, #header-title { display: none; }
+  #header-project { flex: 1; max-width: none; font-size: var(--fs-base); }
+  .topbar .outline-button span { font-size: var(--fs-sm); }
+
+  .chat-scroll { padding-top: var(--s-2); scrollbar-gutter: auto; }
+  .welcome { margin-top: min(10vh, 64px); }
+  .welcome h1 { font-size: 24px; }
+  .welcome > p { font-size: var(--fs-md); }
+  .suggestions { margin-top: var(--s-5); }
+  .suggestions button { padding: 0 var(--s-3); font-size: var(--fs-sm); }
+  .message { margin-bottom: var(--s-5); }
+  .message.user { max-width: 88%; margin-bottom: var(--s-5); }
+  .message.user.has-date { max-width: min(88%, calc(100% - 72px * var(--text-size-factor))); }
+  .message pre, .code-card pre { font-size: 12px; }
+
+  .composer-wrap { padding: var(--s-1) var(--s-3) var(--s-3); }
+  .autocomplete { left: 0; right: 0; width: auto; min-width: 0; max-width: none; }
+
+  .file-panel { position: absolute; inset: 0; z-index: 15; width: 100%; border: 0; }
+
+  /* Every dialog becomes a sheet or a full screen. */
+  dialog, .wide-dialog, .changes-dialog { width: calc(100% - 24px); max-width: none; max-height: calc(var(--app-height, 100dvh) - 24px); padding: var(--s-4); }
+  .sheet-dialog, .settings-dialog {
+    width: 100%; max-width: 560px; margin: auto auto 0;
+    max-height: calc(var(--app-height, 100dvh) - 12px);
+    padding: 0 var(--s-4) var(--s-4);
+    border-radius: var(--r-xl) var(--r-xl) 0 0;
+    transform: translateY(var(--sheet-offset, 0px));
+    transition: transform var(--normal) var(--ease);
+  }
+  .sheet-dialog[open], .settings-dialog[open] { animation: sheet-enter 240ms var(--ease); }
+  .sheet-dragging { transition: none; user-select: none; }
+  .sheet-grip {
+    position: sticky; top: 0; z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+    width: calc(100% + var(--s-8)); height: 28px; min-height: 28px; margin: 0 calc(var(--s-4) * -1);
+    background: var(--surface); touch-action: none; cursor: grab;
+  }
+  .sheet-grip span { display: block; width: 36px; height: 4px; border-radius: var(--r-full); background: var(--fill-3); }
+  .sheet-grip:active { cursor: grabbing; }
+  .sheet-dialog .dialog-head, .settings-dialog .dialog-head { margin-top: 0; }
+  .editor-dialog, .image-dialog {
+    width: 100%; max-width: none; height: var(--app-height, 100dvh); max-height: 100%;
+    margin: 0; padding: var(--s-3) var(--s-4) var(--s-4); border-radius: 0;
+  }
+
+  .settings-layout { display: block; }
+  .settings-nav {
+    display: flex; gap: var(--s-1); overflow-x: auto; scrollbar-width: none;
+    margin: 0 calc(var(--s-4) * -1) var(--s-2); padding: 0 var(--s-4) var(--s-2);
+  }
+  .settings-nav::-webkit-scrollbar { display: none; }
+  .settings-nav button { flex: 0 0 auto; width: auto; min-height: 44px; padding: 0 var(--s-4); border-radius: var(--r-full); white-space: nowrap; text-align: center; }
+  .settings-content { max-height: none; overflow: visible; }
+  .settings-section h3 { margin-top: var(--s-1); }
+
+  .file-search input, .text-input, .question input:not([type="checkbox"]), .question select { font-size: 16px; }
+  .toolbar button { flex: 1 1 auto; }
+  #tools-dialog .toolbar { margin-left: calc(var(--s-4) * -1); margin-right: calc(var(--s-4) * -1); padding: 0 var(--s-4); }
+  #tools-dialog .toolbar button { flex: none; }
+  .terminal-form { flex-wrap: wrap; }
+  .terminal-form .text-input { flex-basis: 100%; }
+  .console { max-height: calc(var(--app-height, 100dvh) * .45); }
+  .phone-stop-banner { top: 60px; right: var(--s-3); }
+}
+@keyframes sheet-enter { from { transform: translateY(32px); opacity: .6; } to { transform: translateY(0); opacity: 1; } }
+
+@media (max-width: 480px) {
+  .usage-limits { grid-template-columns: 1fr; }
+  .account-profile-actions { width: 100%; }
+  .account-profile-actions button { flex: 1; }
+}
+
+@media (max-width: 420px) {
+  .composer-bottom .options-button { padding: 0 var(--s-2) 0 var(--s-3); }
+}
+
+@media (max-width: 360px) {
+  :root { --gutter: var(--s-3); }
+  .composer-wrap { padding-left: var(--s-2); padding-right: var(--s-2); }
+}
+
+/* ---------- Short viewports: keyboard open, landscape phones ---------- */
+@media (max-height: 450px) {
+  :root { --header-height: 48px; }
+  .welcome { margin: var(--s-3) auto; }
+  .welcome-mark { margin-bottom: var(--s-2); }
+  .suggestions { margin-top: var(--s-3); }
+  .composer-wrap { padding-top: var(--s-1); padding-bottom: var(--s-2); }
+  .sheet-grip { height: 24px; min-height: 24px; }
+}
