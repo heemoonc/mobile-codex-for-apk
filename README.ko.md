@@ -45,6 +45,21 @@ Mobile Codex for APK는 Android 기기에서 Codex와 함께 프로젝트를 살
 
 > **배포 상태:** 개발용 빌드입니다. AI 추론과 계정 인증에는 인터넷 연결이 필요합니다. 모델 자체가 기기에서 오프라인으로 실행되는 앱은 아닙니다. 저장소가 비공개인 동안에는 다운로드에도 해당 저장소 접근 권한이 필요합니다.
 
+## 화면 미리보기
+
+현재 앱 UI를 예시 프로젝트 상태로 브라우저에서 캡처한 화면입니다. 각 README의 언어에 맞는 화면을 제공합니다.
+
+<table>
+<tr>
+<td align="center"><strong>Android 개발 시작</strong><br><img src="assets/readme/previews/start-ko.png" width="300" alt="Android 개발 시작" /></td>
+<td align="center"><strong>개발 환경 설정</strong><br><img src="assets/readme/previews/setup-ko.png" width="300" alt="개발 환경 설정" /></td>
+</tr>
+<tr>
+<td align="center"><strong>자동 검증</strong><br><img src="assets/readme/previews/verification-ko.png" width="300" alt="자동 검증" /></td>
+<td align="center"><strong>앱 업데이트와 GitHub</strong><br><img src="assets/readme/previews/updates-ko.png" width="300" alt="앱 업데이트와 GitHub" /></td>
+</tr>
+</table>
+
 ## 주요 기능
 
 | 기능 | 설명 |

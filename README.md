@@ -44,6 +44,21 @@ Connect a project folder and use the chat workspace to move from a development r
 
 > **Distribution status:** development build. AI inference and account authentication require an internet connection; the model does not run offline on the device. While the repository is private, downloads also require repository access.
 
+## Screenshots
+
+Browser captures of the current app UI with sample project state. Each README shows previews in its own language.
+
+<table>
+<tr>
+<td align="center"><strong>Android development start</strong><br><img src="assets/readme/previews/start-en.png" width="300" alt="Android development start" /></td>
+<td align="center"><strong>Development environment setup</strong><br><img src="assets/readme/previews/setup-en.png" width="300" alt="Development environment setup" /></td>
+</tr>
+<tr>
+<td align="center"><strong>Automatic verification</strong><br><img src="assets/readme/previews/verification-en.png" width="300" alt="Automatic verification" /></td>
+<td align="center"><strong>App updates and GitHub</strong><br><img src="assets/readme/previews/updates-en.png" width="300" alt="App updates and GitHub" /></td>
+</tr>
+</table>
+
 ## Features
 
 | Feature | What it provides |
