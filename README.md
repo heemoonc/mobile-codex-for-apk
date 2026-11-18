@@ -18,9 +18,9 @@
 
 ---
 
-## Start here · dev43
+## Start here · dev44
 
-[**User manual**](docs/MANUAL.en.md) · [한국어 매뉴얼](docs/MANUAL.ko.md) · [Current release: 0.3.9-apk-dev43](https://github.com/heemoonc/mobile-codex-for-apk/releases/tag/v0.3.9-apk-dev43)
+[**User manual**](docs/MANUAL.en.md) · [한국어 매뉴얼](docs/MANUAL.ko.md) · [Current release: 0.3.9-apk-dev44](https://github.com/heemoonc/mobile-codex-for-apk/releases/tag/v0.3.9-apk-dev44)
 
 **One Android device: prepare tools → create/import a project → implement → verify → export/install APK → optionally save to GitHub.**
 
@@ -34,7 +34,7 @@
 
 Projects created/imported through Android development start use app-private storage; Linux builds the same files through `/workspace`. The original working-folder picker remains available. **ChatGPT and GitHub are not required for project creation, setup or builds.** AI coding needs ChatGPT sign-in; private clones/uploads need separate bundled Git authentication. GitHub is optional.
 
-dev43 fixes the default update repository and adds direct update and GitHub release shortcuts. Character packs default to off on fresh installations. Development tools use a single download/install action. It includes the Android start hub and explicit Git clone/status/selected-file commit/upload screens. It also includes first-install tool downloads, progress indicators and the development workflow/manual. [Read the complete guide](docs/MANUAL.en.md).
+dev44 clears the download/license panel after successful tool installation and corrects the completed setup status. It also fixes the default update repository and adds direct update and GitHub release shortcuts. Character packs default to off on fresh installations. Development tools use a single download/install action. It includes the Android start hub and explicit Git clone/status/selected-file commit/upload screens. It also includes first-install tool downloads, progress indicators and the development workflow/manual. [Read the complete guide](docs/MANUAL.en.md).
 
 ## Overview
 

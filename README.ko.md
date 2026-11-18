@@ -19,9 +19,9 @@
 
 ---
 
-## 시작 안내 · dev43
+## 시작 안내 · dev44
 
-[**사용 매뉴얼**](docs/MANUAL.ko.md) · [English manual](docs/MANUAL.en.md) · [현재 릴리스: 0.3.9-apk-dev43](https://github.com/heemoonc/mobile-codex-for-apk/releases/tag/v0.3.9-apk-dev43)
+[**사용 매뉴얼**](docs/MANUAL.ko.md) · [English manual](docs/MANUAL.en.md) · [현재 릴리스: 0.3.9-apk-dev44](https://github.com/heemoonc/mobile-codex-for-apk/releases/tag/v0.3.9-apk-dev44)
 
 **안드로이드 기기 하나로 도구 준비 → 프로젝트 생성·가져오기 → 구현 → 검증 → APK 저장·설치 → 선택적으로 GitHub 저장까지 진행합니다.**
 
@@ -35,7 +35,7 @@
 
 Android 개발 시작에서 생성·가져온 프로젝트는 앱 내부에 저장되고 Linux에서 같은 파일을 `/workspace`로 연결해 빌드합니다. 기존 작업 폴더 선택도 유지합니다. **프로젝트 생성·환경 준비·빌드에는 ChatGPT와 GitHub 연결이 필요하지 않습니다.** AI 개발 대화는 ChatGPT 로그인, 비공개 복제·업로드는 별도의 번들 Git 인증이 필요합니다. GitHub는 선택 기능입니다.
 
-dev43은 업데이트 기본 저장소를 수정하고 업데이트·GitHub 릴리스 바로가기를 제공합니다. 새 설치에서는 캐릭터 팩이 기본으로 꺼져 있습니다. 개발 도구는 다운로드·설치로 제공합니다. Android 개발 시작과 명시적인 Git 복제·변경 조회·선택 파일 커밋·업로드 화면이 추가됐습니다. 최초 설치용 도구 다운로드, 진행 표시, 개발 단계와 매뉴얼도 제공합니다. [자세한 사용법](docs/MANUAL.ko.md)을 확인하십시오.
+dev44는 도구 설치 성공 후 다운로드·약관 영역을 접고 완료 상태를 올바르게 표시합니다. 업데이트 기본 저장소를 수정하고 업데이트·GitHub 릴리스 바로가기를 제공합니다. 새 설치에서는 캐릭터 팩이 기본으로 꺼져 있습니다. 개발 도구는 다운로드·설치로 제공합니다. Android 개발 시작과 명시적인 Git 복제·변경 조회·선택 파일 커밋·업로드 화면이 추가됐습니다. 최초 설치용 도구 다운로드, 진행 표시, 개발 단계와 매뉴얼도 제공합니다. [자세한 사용법](docs/MANUAL.ko.md)을 확인하십시오.
 
 ## 소개
 

@@ -2,7 +2,7 @@
 
 [소개](../README.ko.md) · [English manual](MANUAL.en.md) · [최신 APK](https://github.com/heemoonc/mobile-codex-for-apk/releases/latest)
 
-이 매뉴얼은 **0.3.9-apk-dev43**의 메뉴와 동작을 기준으로 합니다. 프로젝트 생성·환경 준비·빌드는 ChatGPT와 GitHub 연결 없이 사용할 수 있습니다. AI 대화에는 계정과 인터넷이 필요합니다.
+이 매뉴얼은 **0.3.9-apk-dev44**의 메뉴와 동작을 기준으로 합니다. 프로젝트 생성·환경 준비·빌드는 ChatGPT와 GitHub 연결 없이 사용할 수 있습니다. AI 대화에는 계정과 인터넷이 필요합니다.
 
 ## 1. 설치와 업데이트
 
