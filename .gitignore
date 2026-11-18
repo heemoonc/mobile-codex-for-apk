@@ -95,3 +95,8 @@ FORK_NOTES.md
 # Public contributor build instructions.
 !/docs/BUILDING.ko.md
 !/docs/BUILDING.en.md
+
+# Local links to prepared build inputs are excluded as well.
+/app/src/main/jniLibs
+/app/src/main/assets/runtime
+/app/src/main/assets/devtools

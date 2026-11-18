@@ -2,7 +2,7 @@
 
 [Overview](../README.md) · [한국어 매뉴얼](MANUAL.ko.md) · [Latest APK](https://github.com/heemoonc/mobile-codex-for-apk/releases/latest)
 
-This guide describes **0.3.9-apk-dev41**. Creating projects, preparing tools and building do not require ChatGPT or GitHub. AI conversations require an eligible account and internet access. Korean labels below match the installed UI; translated labels depend on language settings.
+This guide describes **0.3.9-apk-dev42**. Creating projects, preparing tools and building do not require ChatGPT or GitHub. AI conversations require an eligible account and internet access. Korean labels below match the installed UI; translated labels depend on language settings.
 
 ## 1. Install and update
 

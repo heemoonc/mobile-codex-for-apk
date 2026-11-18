@@ -19,9 +19,9 @@
 
 ---
 
-## 시작 안내 · dev41
+## 시작 안내 · dev42
 
-[**사용 매뉴얼**](docs/MANUAL.ko.md) · [English manual](docs/MANUAL.en.md) · [현재 릴리스: 0.3.9-apk-dev41](https://github.com/heemoonc/mobile-codex-for-apk/releases/tag/v0.3.9-apk-dev41)
+[**사용 매뉴얼**](docs/MANUAL.ko.md) · [English manual](docs/MANUAL.en.md) · [현재 릴리스: 0.3.9-apk-dev42](https://github.com/heemoonc/mobile-codex-for-apk/releases/tag/v0.3.9-apk-dev42)
 
 **안드로이드 기기 하나로 도구 준비 → 프로젝트 생성·가져오기 → 구현 → 검증 → APK 저장·설치 → 선택적으로 GitHub 저장까지 진행합니다.**
 
@@ -35,7 +35,7 @@
 
 Android 개발 시작에서 생성·가져온 프로젝트는 앱 내부에 저장되고 Linux에서 같은 파일을 `/workspace`로 연결해 빌드합니다. 기존 작업 폴더 선택도 유지합니다. **프로젝트 생성·환경 준비·빌드에는 ChatGPT와 GitHub 연결이 필요하지 않습니다.** AI 개발 대화는 ChatGPT 로그인, 비공개 복제·업로드는 별도의 번들 Git 인증이 필요합니다. GitHub는 선택 기능입니다.
 
-dev41은 새 설치에서 캐릭터 팩을 기본으로 끕니다. 개발 도구는 다운로드·설치로 제공합니다. Android 개발 시작과 명시적인 Git 복제·변경 조회·선택 파일 커밋·업로드 화면이 추가됐습니다. 최초 설치용 도구 다운로드, 진행 표시, 개발 단계와 매뉴얼도 제공합니다. [자세한 사용법](docs/MANUAL.ko.md)을 확인하십시오.
+dev42는 앱 정보에 포크 개발·관리자를 표시하고 설정 선택 버튼의 여백을 정리합니다. 새 설치에서는 캐릭터 팩이 기본으로 꺼져 있습니다. 개발 도구는 다운로드·설치로 제공합니다. Android 개발 시작과 명시적인 Git 복제·변경 조회·선택 파일 커밋·업로드 화면이 추가됐습니다. 최초 설치용 도구 다운로드, 진행 표시, 개발 단계와 매뉴얼도 제공합니다. [자세한 사용법](docs/MANUAL.ko.md)을 확인하십시오.
 
 ## 소개
 

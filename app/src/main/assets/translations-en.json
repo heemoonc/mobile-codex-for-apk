@@ -1599,5 +1599,9 @@
   "개발 도구 다운로드·설정": "Download and configure development tools",
   "개발 환경 설정에서 JDK 17·SDK 35·ARM64 aapt2를 다운로드하고 실행을 확인합니다. 출처와 SDK 약관을 확인한 뒤 설치합니다.": "Download JDK 17, SDK 35 and ARM64 aapt2 in development setup, then verify execution. Review sources and SDK terms before installation.",
   "도구 → Android 개발 환경 설정에서 Linux 준비 → 도구 다운로드·설치 → 개발 도구 실행 확인을 진행합니다. 계정·프로젝트 선택 전에도 사용할 수 있습니다. 다운로드 출처·용량·SDK 약관 전문을 확인하고 직접 동의하면 고정 버전 도구를 SHA-256 검증 후 설치합니다. 기존 /opt/android는 덮어쓰지 않습니다. 설치 후 실행 확인과 프로젝트 빌드가 필요합니다.": "Open Tools → Android development setup: prepare Linux → download and install tools → verify tool execution. No sign-in or project is required. Review sources, sizes and full SDK terms, then explicitly accept to download pinned versions with SHA-256 verification. Existing /opt/android is preserved. Execution verification and a project build are still required.",
-  "Linux 설치에는 인터넷과 별도 저장 공간이 필요합니다. 도구 다운로드는 약 310 MiB이며 설치에 최소 1500 MiB의 여유 공간이 필요합니다. Gradle·라이브러리는 첫 프로젝트 빌드에서 다운로드합니다.": "Linux installation requires internet access and separate storage. Tool downloads are about 310 MiB and installation requires at least 1500 MiB of free space. Gradle and libraries download during the first project build."
+  "Linux 설치에는 인터넷과 별도 저장 공간이 필요합니다. 도구 다운로드는 약 310 MiB이며 설치에 최소 1500 MiB의 여유 공간이 필요합니다. Gradle·라이브러리는 첫 프로젝트 빌드에서 다운로드합니다.": "Linux installation requires internet access and separate storage. Tool downloads are about 310 MiB and installation requires at least 1500 MiB of free space. Gradle and libraries download during the first project build.",
+  "포크 개발·관리: heemoonc": "Fork development and maintenance: heemoonc",
+  "저장소: github.com/heemoonc/mobile-codex-for-apk": "Repository: github.com/heemoonc/mobile-codex-for-apk",
+  "원본: Mobile Codex · 제작: nokryong": "Original: Mobile Codex · Created by nokryong",
+  "OpenAI 공식 앱이 아닌 독립 클라이언트입니다.": "An independent client, not an official OpenAI app."
 }
