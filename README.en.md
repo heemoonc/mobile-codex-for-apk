@@ -105,6 +105,9 @@ Android shared storage may restrict executables and symbolic links. Use the app'
 ### 3. Enable optional features
 
 - **Phone control:** open Android Accessibility settings from Settings → Tools and enable access and control yourself. Use the on-screen stop button to end control. Screen content may be sent to the AI service; enable this only for the task you intend.
+
+**Why enable phone control?** It lets Codex inspect the actual device screen and tap, type or scroll to help check the app you built. For example, Codex can help check whether a button responds, entered text appears, or an error occurs on a particular screen. It is optional for coding, environment setup and builds, and unnecessary if you prefer to operate the app yourself. You must still confirm APK installation and grant permissions yourself.
+
 - **Voice:** allow microphone access when using voice features.
 - **Character packs:** off by default on fresh installations. Enable a pack in settings if desired. No character is displayed when disabled.
 - **GitHub:** connector repository access and terminal Git authentication are separate. Configure Git authentication in the environment running `git push`. Never paste tokens or private keys into chats or commit them.

@@ -10,6 +10,10 @@ Download `Mobile-Codex-for-APK-*.apk` from release Assets, not the automatic Sou
 
 Application ID: `dev.mobilecodex.apk`. The original Mobile Codex is a separate app; accounts, Linux, tools and credentials are not shared automatically. The Accessibility entry is **Mobile Codex APK · 휴대폰 제어**. Confirm installation and permissions yourself in Android.
 
+## When to use phone control
+
+**Why enable phone control?** It lets Codex inspect the actual device screen and tap, type or scroll to help check the app you built. For example, Codex can help check whether a button responds, entered text appears, or an error occurs on a particular screen. It is optional for coding, environment setup and builds, and unnecessary if you prefer to operate the app yourself. You must still confirm APK installation and grant permissions yourself.
+
 ## 2. Prepare Android tools
 
 Open **Tools → Android development setup** or **Android development start → Prepare development environment**.
