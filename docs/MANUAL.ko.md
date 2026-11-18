@@ -1,6 +1,6 @@
 # Mobile Codex for APK 사용 매뉴얼
 
-[소개](../README.md) · [English manual](MANUAL.en.md) · [최신 APK](https://github.com/heemoonc/mobile-codex-for-apk/releases/latest)
+[소개](../README.ko.md) · [English manual](MANUAL.en.md) · [최신 APK](https://github.com/heemoonc/mobile-codex-for-apk/releases/latest)
 
 이 매뉴얼은 **0.3.9-apk-dev41**의 메뉴와 동작을 기준으로 합니다. 프로젝트 생성·환경 준비·빌드는 ChatGPT와 GitHub 연결 없이 사용할 수 있습니다. AI 대화에는 계정과 인터넷이 필요합니다.
 
@@ -87,7 +87,7 @@ git config user.email "YOUR_GITHUB_NOREPLY_EMAIL"
 git remote add origin https://github.com/OWNER/REPOSITORY.git
 ```
 
-사용자 이름·이메일 설정은 인증이 아닙니다. 인증은 본인의 Git 자격 증명 방식으로 별도 구성하고 토큰·개인 키를 대화나 소스에 넣지 마십시오. 일반 폴더 복사와 소스 백업 ZIP에는 `.git` 이력이 포함되지 않습니다. Git 이력을 유지하려면 GitHub 복제를 사용하십시오. 소스 ZIP은 앱에 설치한 Linux·도구·인증 전체 백업이 아닙니다.
+사용자 이름·이메일 설정은 인증이 아닙니다. 인증은 본인의 Git 자격 증명 방식으로 별도 구성하고 토큰·개인 키를 대화나 소스에 넣지 마십시오. 일반 폴더 복사와 소스 백업 ZIP에는 `.git` 이력이 포함되지 않습니다. GitHub 가져오기는 원격 연결과 최신 커밋을 포함하는 얕은 복제(`--depth=1`)입니다. 이전 전체 이력은 가져오지 않습니다. 소스 ZIP은 앱에 설치한 Linux·도구·인증 전체 백업이 아닙니다.
 
 ## 8. 문제 해결
 
@@ -101,8 +101,12 @@ git remote add origin https://github.com/OWNER/REPOSITORY.git
 | 접근성이 켜져 있지만 작동하지 않음 | 올바른 APK 앱 항목인지 확인하고 사용자가 직접 껐다 켜 다시 연결합니다. |
 | 다른 Android 버전이 미검증 | 현재 기기 빌드와 다른 OS 실기 검증은 별개입니다. |
 
-앱 내 매뉴얼은 **개발 진행 → 사용 매뉴얼**에서 읽을 수 있습니다. 개발 도구 라이선스와 소스 구성은 [README](../README.md), [서드파티 고지](../THIRD_PARTY_NOTICES.md)를 참고하십시오.
+앱 내 매뉴얼은 **개발 진행 → 사용 매뉴얼**에서 읽을 수 있습니다. 개발 도구 라이선스와 소스 구성은 [README](../README.ko.md), [서드파티 고지](../THIRD_PARTY_NOTICES.md)를 참고하십시오.
 
 ## 캐릭터 팩
 
 새 설치에서는 기본으로 꺼져 있으며 캐릭터를 표시하지 않습니다. 설정에서 캐릭터 팩 사용을 켤 수 있습니다. 기존에 저장한 켜기·끄기 선택은 유지합니다.
+
+## 이 앱 자체를 수정하려면
+
+일반 앱 개발 환경은 위의 앱 메뉴에서 준비합니다. Mobile Codex for APK 자체를 수정·재빌드하는 경우에만 [개발자 빌드 안내](BUILDING.ko.md)를 따르십시오.

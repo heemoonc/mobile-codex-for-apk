@@ -91,3 +91,7 @@ FORK_NOTES.md
 # Public-facing user manuals only; private notes and evidence stay excluded.
 !/docs/MANUAL.ko.md
 !/docs/MANUAL.en.md
+
+# Public contributor build instructions.
+!/docs/BUILDING.ko.md
+!/docs/BUILDING.en.md

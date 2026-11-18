@@ -1,6 +1,6 @@
 # Mobile Codex for APK user manual
 
-[Overview](../README.en.md) · [한국어 매뉴얼](MANUAL.ko.md) · [Latest APK](https://github.com/heemoonc/mobile-codex-for-apk/releases/latest)
+[Overview](../README.md) · [한국어 매뉴얼](MANUAL.ko.md) · [Latest APK](https://github.com/heemoonc/mobile-codex-for-apk/releases/latest)
 
 This guide describes **0.3.9-apk-dev41**. Creating projects, preparing tools and building do not require ChatGPT or GitHub. AI conversations require an eligible account and internet access. Korean labels below match the installed UI; translated labels depend on language settings.
 
@@ -86,7 +86,7 @@ git config user.email "YOUR_GITHUB_NOREPLY_EMAIL"
 git remote add origin https://github.com/OWNER/REPOSITORY.git
 ```
 
-Author settings are not authentication. Configure your own Git credential method separately; never place tokens or private keys in chats or source. Folder copies and source backup ZIPs exclude `.git`; clone from GitHub to retain Git history. A source ZIP does not back up the installed Linux environment, tools or credentials.
+Author settings are not authentication. Configure your own Git credential method separately; never place tokens or private keys in chats or source. Folder copies and source backup ZIPs exclude `.git`; GitHub import creates a shallow clone (`--depth=1`) with the remote and latest commit, without fetching the full earlier history. A source ZIP does not back up the installed Linux environment, tools or credentials.
 
 ## 8. Troubleshooting
 
@@ -100,8 +100,12 @@ Author settings are not authentication. Configure your own Git credential method
 | Accessibility enabled but disconnected | Confirm the APK app entry; toggle it off/on yourself to reconnect. |
 | Another API remains unverified | Current-device builds do not establish other-OS compatibility. |
 
-The in-app manual is under **Development progress → User manual**. See [README](../README.en.md) and [third-party notices](../THIRD_PARTY_NOTICES.md) for source layout and licensing.
+The in-app manual is under **Development progress → User manual**. See [README](../README.md) and [third-party notices](../THIRD_PARTY_NOTICES.md) for source layout and licensing.
 
 ## Character packs
 
 Character packs default to off on a fresh installation, with no character displayed. Enable them in settings if desired. Previously saved on/off preferences are preserved.
+
+## Modifying this client
+
+Prepare the normal app-development environment through the menus above. Follow the [contributor build guide](BUILDING.en.md) only when modifying and rebuilding Mobile Codex for APK itself.
