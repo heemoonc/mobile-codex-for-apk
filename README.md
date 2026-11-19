@@ -18,9 +18,9 @@
 
 ---
 
-## Start here · dev44
+## Start here · dev57
 
-[**User manual**](docs/MANUAL.en.md) · [한국어 매뉴얼](docs/MANUAL.ko.md) · [Current release: 0.3.9-apk-dev44](https://github.com/heemoonc/mobile-codex-for-apk/releases/tag/v0.3.9-apk-dev44)
+[**User manual**](docs/MANUAL.en.md) · [한국어 매뉴얼](docs/MANUAL.ko.md) · [Current release: 0.3.9-apk-dev57](https://github.com/heemoonc/mobile-codex-for-apk/releases/tag/v0.3.9-apk-dev57)
 
 **One Android device: prepare tools → create/import a project → implement → verify → export/install APK → optionally save to GitHub.**
 
@@ -32,9 +32,9 @@
 | Build and export | Build / save APK → Build APK → Refresh → Inspect → Save |
 | Keep history and upload | Save changes / upload to GitHub → Compare → Select files → Commit → Separately confirm upload |
 
-Projects created/imported through Android development start use app-private storage; Linux builds the same files through `/workspace`. The original working-folder picker remains available. **ChatGPT and GitHub are not required for project creation, setup or builds.** AI coding needs ChatGPT sign-in; private clones/uploads need separate bundled Git authentication. GitHub is optional.
+Projects created/imported through Android development start use app-private storage; Linux builds the same files through `/workspace`. The original working-folder picker remains available. **ChatGPT and GitHub are not required for project creation, setup or builds.** AI coding needs ChatGPT sign-in; private clones/uploads need GitHub authentication. Use **Tools → Connect GitHub account** to connect app Git and Linux Git through GitHub CLI. GitHub is optional.
 
-dev44 clears the download/license panel after successful tool installation and corrects the completed setup status. It also fixes the default update repository and adds direct update and GitHub release shortcuts. Character packs default to off on fresh installations. Development tools use a single download/install action. It includes the Android start hub and explicit Git clone/status/selected-file commit/upload screens. It also includes first-install tool downloads, progress indicators and the development workflow/manual. [Read the complete guide](docs/MANUAL.en.md).
+dev57 adds GitHub account connection shared with Linux Git, new projects while another conversation runs, login-code copying and project/build APK names. It improves setup status colors, progress indicators, Git installation, dropdowns and button spacing. Kotlin · Compose is now the default template. [Read the complete guide](docs/MANUAL.en.md).
 
 ## Overview
 
@@ -133,7 +133,7 @@ Android shared storage may restrict executables and symbolic links. Use the app'
 
 - **Voice:** allow microphone access when using voice features.
 - **Character packs:** off by default on fresh installations. Enable a pack in settings if desired. No character is displayed when disabled.
-- **GitHub:** connector repository access and terminal Git authentication are separate. Configure Git authentication in the environment running `git push`. Never paste tokens or private keys into chats or commit them.
+- **GitHub:** connector repository access and terminal Git authentication are separate. Use the app GitHub account screen to connect Linux Git and the app Git credential helper. Keep Linux enabled for this shared authentication. Never paste tokens or private keys into chats or commit them.
 
 ## Android development assistant
 

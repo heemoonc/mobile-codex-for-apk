@@ -1232,10 +1232,10 @@ test('project menus remain available while global import controls wait for runni
  w.mobileCodexEvent('state',{...snapshot,projects:[project],sessions:[{id:'other',title:'Other',workspaceKey:'',busy:false}]});
  d.getElementById('add-project').click();await tick();assert.equal(d.querySelectorAll('#project-link-choices button').length,5);
  w.mobileCodexEvent('state',{...snapshot,proBusy:true,projects:[project],sessions:[{id:'other',title:'Other',workspaceKey:'',busy:false}]});
- assert.equal(d.getElementById('add-project').disabled,true);assert.ok([...d.querySelectorAll('#project-link-choices button')].every(button=>button.disabled));assert.equal(d.querySelector('.project-more').disabled,false);assert.equal(d.querySelector('.project-new').disabled,true);assert.equal(d.querySelector('#projects .new-thread').disabled,true);
+ assert.equal(d.getElementById('add-project').disabled,false);assert.ok([...d.querySelectorAll('#project-link-choices button')].every(button=>button.disabled));assert.equal(d.querySelector('.project-more').disabled,false);assert.equal(d.querySelector('.project-new').disabled,true);assert.equal(d.querySelector('#projects .new-thread').disabled,true);
  d.getElementById('add-project').click();await tick();assert.equal(calls.some(c=>/^projects\.(create|import|merge|prefer|rename|remove)$/.test(c.action)||c.action==='files.pick'),false);
  w.mobileCodexEvent('state',{...snapshot,projects:[project],sessions:[{id:'other',title:'Other',workspaceKey:'',busy:true}]});
- assert.equal(d.getElementById('add-project').disabled,true);assert.equal(d.querySelector('.project-more').disabled,false);assert.equal(d.querySelector('#projects .new-thread').disabled,true);
+ assert.equal(d.getElementById('add-project').disabled,false);assert.equal(d.querySelector('.project-more').disabled,false);assert.equal(d.querySelector('#projects .new-thread').disabled,true);
 });
 test('mobile project menu supports new chat, persisted display rename and cancellable removal',async()=>{
   let confirmResult=true;
@@ -1850,7 +1850,7 @@ test('Android folder import cancellation leaves the original picker and never cl
 });
 test('Android start opens the existing template form without creating or running a project',async()=>{
  const {w,calls}=setup({}, {androidStart:true});await tick();w.AndroidStartUI.open();w.document.getElementById('ad-create').click();await tick();
- assert.equal(w.document.getElementById('android-project-dialog').open,true);assert.equal(w.document.getElementById('android-project-template').value,'java');assert.equal(calls.some(c=>c.action==='projects.android.create'||c.action==='terminal.run'),false);
+ assert.equal(w.document.getElementById('android-project-dialog').open,true);assert.equal(w.document.getElementById('android-project-template').value,'compose');assert.equal(calls.some(c=>c.action==='projects.android.create'||c.action==='terminal.run'),false);
 });
 
 test('fresh installation defaults characters off and preserves an explicit opt-in',async()=>{
@@ -1880,4 +1880,26 @@ test('update browser links use the saved source and reject malformed repository 
  d.getElementById('update-github').click();await tick();assert.equal(calls.find(c=>c.action==='ui.externalBrowser').args.url,'https://github.com/custom/repo');
  w.mobileCodexEvent('updates.changed',{repository:'../bad?token=x',status:'idle',revision:2});
  d.getElementById('update-releases').click();await tick();assert.equal(calls.filter(c=>c.action==='ui.externalBrowser').length,1);
+});
+test('Android start allows isolated creation during another busy conversation and keeps other mutations gated',async()=>{
+ const {w,calls,snapshot}=setup({'projects.android.create':()=>({activePreserved:true})},{androidStart:true});await tick();
+ w.mobileCodexEvent('state',{...snapshot,busy:true,sessions:[{id:'running',busy:true}],workspace:{key:'A',name:'A',available:true}});w.AndroidStartUI.open();const d=w.document;
+ assert.equal(d.getElementById('ad-create').disabled,false);for(const id of ['ad-folder','ad-zip','ad-github'])assert.equal(d.getElementById(id).disabled,true);
+ d.getElementById('ad-create').click();await tick();assert.equal(d.getElementById('android-project-dialog').open,true);
+ d.getElementById('android-project-name').value='두 번째 앱';d.getElementById('android-project-folder').value='second-app';d.getElementById('android-project-form').dispatchEvent(new w.Event('submit',{cancelable:true}));await tick();
+ assert.equal(calls.filter(c=>c.action==='projects.android.create').length,1);assert.equal(calls.some(c=>['chat.stop','chat.new','chat.resume','projects.select'].includes(c.action)),false);assert.match(d.getElementById('toast').textContent,/기존 작업/);
+});
+
+test('project creation opened during work retains preserve intent after that work finishes',async()=>{
+ const {w,calls,snapshot}=setup({'projects.android.create':()=>({activePreserved:true})},{androidStart:true});await tick();const d=w.document;
+ w.mobileCodexEvent('state',{...snapshot,busy:true});w.AndroidStartUI.open();d.getElementById('ad-create').click();await tick();
+ w.mobileCodexEvent('state',{...snapshot,busy:false});d.getElementById('android-project-name').value='추가 앱';d.getElementById('android-project-form').dispatchEvent(new w.Event('submit',{cancelable:true}));await tick();
+ assert.equal(calls.find(c=>c.action==='projects.android.create').args.keepCurrent,true);
+});
+test('sign-in has an explicit copy button enabled only when its device code is ready',async()=>{
+ let release;const {w,calls,snapshot}=setup({'auth.login':()=>new Promise(r=>release=r)});await tick();const d=w.document;
+ w.mobileCodexEvent('state',{...snapshot,account:{},authState:'signed_out'});d.getElementById('connect').click();await tick();
+ const copy=d.getElementById('copy-login-code');assert.ok(copy);assert.equal(copy.disabled,true);copy.click();assert.equal(calls.some(c=>c.action==='ui.copyCode'),false);
+ release({userCode:'ABCD-EFGH',verificationUrl:'https://auth.openai.com/deviceauth',loginId:'fixture'});await tick();assert.equal(copy.disabled,false);copy.click();await tick();
+ assert.deepEqual(calls.find(c=>c.action==='ui.copyCode').args,{code:'ABCD-EFGH'});assert.match(d.getElementById('toast').textContent,/복사했습니다/);
 });

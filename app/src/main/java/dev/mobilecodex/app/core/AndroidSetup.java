@@ -12,6 +12,7 @@ public final class AndroidSetup {
   +"[ -f /opt/android/sdk/platforms/android-35/android.jar ] || { echo 'SDK Platform 35 is missing'; exit 2; }\n"
   +"[ -f /opt/android/sdk/build-tools/35.0.0/lib/d8.jar ] || { echo 'Build Tools 35 is missing'; exit 2; }\n"
   +"\"$JAVA_HOME/bin/java\" -cp /opt/android/sdk/build-tools/35.0.0/lib/d8.jar com.android.tools.r8.D8 --version\n"
+  +"git --version\n"
   +"echo MC_ANDROID_SETUP=passed\n";}
  public static boolean downloadPassed(int exit,String output){return markerPassed(exit,output,"MC_ANDROID_TOOLS=installed");}
  public static boolean passed(int exit,String output){return markerPassed(exit,output,"MC_ANDROID_SETUP=passed");}

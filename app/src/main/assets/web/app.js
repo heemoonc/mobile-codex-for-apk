@@ -323,7 +323,8 @@
     efforts(); if ([...$('effort').options].some(o => o.value === draftOptions.effort)) $('effort').value = draftOptions.effort;
     sizeComposer();
   }
-  let androidProjectBusy = false, sourcePending = false, sourcePreview = null, sourceApplying = false;
+  let androidProjectBusy = false, androidProjectKeepCurrent = false, sourcePending = false, sourcePreview = null, sourceApplying = false;
+  const androidCreationBusy = () => androidProjectBusy || sourceApplying || !!state.sourceBusy;
   const projectWorkBusy = () => androidProjectBusy || sourceApplying || !!state.sourceBusy || !!state.busy || !!state.proBusy || (state.sessions || []).some(session => !!session.busy);
   const generalFolderAvailable = (workspace = state.workspace) => !workspace?.selected && (workspace?.hasLocalFolder === true || workspace?.available === true);
   const workspaceFilesAvailable = (workspace = state.workspace) => workspace?.selected ? workspace.available !== false : generalFolderAvailable(workspace);
@@ -1316,12 +1317,14 @@
     show('project-link-dialog');
   }
   function createAndroidProjectDialog() {
-    if (projectWorkBusy() || state.permissions === 'read-only') return;
-    $('android-project-template').value = 'java'; $('android-project-name').value = ''; $('android-project-package').value = 'com.example.myapp'; $('android-project-folder').value = 'my-app'; $('android-project-error').textContent = '';
+    if (androidCreationBusy() || state.permissions === 'read-only') return;
+    androidProjectKeepCurrent = projectWorkBusy() || !!terminalState?.running;
+    $('android-project-template').value = 'compose'; $('android-project-name').value = ''; $('android-project-package').value = 'com.example.myapp'; $('android-project-folder').value = 'my-app'; $('android-project-error').textContent = '';
     show('android-project-dialog'); $('android-project-name').focus();
   }
   function addProject() {
-    if (projectLinkPending || projectWorkBusy()) return;
+    if (projectLinkPending || androidCreationBusy()) return;
+    if (projectWorkBusy()) { close('project-link-dialog'); createAndroidProjectDialog(); return; }
     projectChoices(t('프로젝트 추가'), '', [
       {label:t('Android 앱 만들기'), run:async () => {
         if (state.permissions === 'read-only') { toast(t('읽기 전용 모드에서는 프로젝트를 만들 수 없습니다.')); return; }
@@ -1481,7 +1484,7 @@
     const target = $('projects'); target.replaceChildren();
     const projects = state.projects || [];
     const workBusy = projectWorkBusy();
-    $('add-project').disabled = workBusy;
+    $('add-project').disabled = androidCreationBusy();
     for (const project of projects) {
       const expandedKey = 'project-expanded:' + (project.projectId || project.key), expanded = localStorage.getItem(expandedKey) !== 'false';
       const section = node('section', null, 'project-tree' + (project.selected ? ' selected' : ''));
@@ -1607,14 +1610,14 @@
     // The account settings button also serves as the first connection entry.
     if (add && state.authState === 'signed_out' && !C.isLoggedIn(state.account) && !(state.accounts || []).length) add = false;
     login = null;
-    show('login-dialog'); $('device-code').textContent = t('연결 준비 중'); $('open-login').disabled = true;
+    show('login-dialog'); $('copy-login-code').disabled = true; $('device-code').textContent = t('연결 준비 중'); $('open-login').disabled = true;
     $('login-help').textContent = t('로그인이 완료되면 이 화면으로 돌아오세요.');
     try {
       login = await call(add ? 'auth.add' : 'auth.login');
       if (!C.safeLoginUrl(login.verificationUrl)) throw new Error(t('잘못된 로그인 응답입니다.'));
-      $('device-code').textContent = login.userCode; $('open-login').disabled = false;
+      $('device-code').textContent = login.userCode; $('copy-login-code').disabled = !String(login.userCode||'').trim(); $('open-login').disabled = false;
     } catch (error) {
-      login = null; $('device-code').textContent = t('연결 실패');
+      login = null; $('copy-login-code').disabled = true; $('device-code').textContent = t('연결 실패');
       $('login-help').textContent = errorText(error); $('open-login').disabled = true;
       throw error;
     }
@@ -2289,6 +2292,7 @@
   };
   reportsUi?.refresh();
   window.mobileCodexBack = () => {
+    if (window.DropdownUI?.close(true)) return true;
     const roomDialog = document.querySelector('.room-dialog[open]');
     if (roomDialog) { roomDialog.close(); return true; }
     if (closeComposerAddMenu()) return true;
@@ -2348,14 +2352,15 @@
   on('scrim', () => sidebar(false)); on('new-chat', async () => newChat(''));
   $('android-project-form').addEventListener('submit',async event => {
     event.preventDefault();
-    if (projectWorkBusy() || state.permissions === 'read-only') return;
+    if (androidCreationBusy() || state.permissions === 'read-only') return;
     const args = {name:$('android-project-name').value.trim(),packageName:$('android-project-package').value.trim(),folder:$('android-project-folder').value.trim(),template:$('android-project-template').value};
+    if (androidProjectKeepCurrent) args.keepCurrent = true;
     androidProjectBusy = true;
     $('android-project-dialog').querySelectorAll('button,input,select').forEach(element => { element.disabled = true; });
     $('android-project-error').textContent = t('프로젝트를 만드는 중입니다.');
     try {
-      await call('projects.android.create',args);
-      close('android-project-dialog'); toast(t('Android 프로젝트를 만들었습니다.'));
+      const created=await call('projects.android.create',args);
+      close('android-project-dialog'); toast(t(created.activePreserved?'새 프로젝트를 추가했습니다. 기존 작업은 계속됩니다.':'Android 프로젝트를 만들었습니다.'));
     } catch (error) { $('android-project-error').textContent = errorText(error); }
     finally {
       androidProjectBusy = false;
@@ -2508,7 +2513,7 @@
     if (selected === 'tools') refreshLinuxStatus();
     if (selected === 'updates') loadUpdates();
   }));
-  on('device-code', async () => { if (login) { await call('ui.copyCode', {code: login.userCode}); toast(t('코드를 복사했습니다.')); } });
+  for (const id of ['device-code','copy-login-code']) on(id, async () => { if (login && String(login.userCode||'').trim()) { await call('ui.copyCode', {code: login.userCode}); toast(t('코드를 복사했습니다.')); } });
   on('open-login', () => login && call('ui.loginBrowser', {url: login.verificationUrl}));
   $('login-dialog').addEventListener('close', () => { if (login?.loginId) call('auth.cancel', {loginId: login.loginId}).catch(() => {}); login = null; });
   on('account-add', () => startLogin(true));
@@ -2858,6 +2863,7 @@
   const resetCreditPanel = $('reset-credits');
   agentUi = window.MobileCodexAgents?.init({call, getState:()=>state, toast, show, close, closeAddMenu:()=>closeComposerAddMenu(false), closeFilePanel:()=>setFilePanelOpen(false), openAccounts:openAccountSettings, usageGauge, usageTime, getCharacters:()=>characterState, characterIcon, openLinuxSettings:()=>{ensureLinuxUi();selectSettingsTab('tools');show('settings-dialog');refreshLinuxStatus();$('linux-environment-card')?.scrollIntoView({block:'start'});}});
   window.AndroidStartUI?.init({call,getState:()=>({...state,terminal:terminalState}),isBusy:projectWorkBusy,t,show,close,toast,
+    canCreate:()=>!androidCreationBusy()&&state.permissions!=='read-only',
     create:createAndroidProjectDialog,
     folder:async()=>{
       if(projectWorkBusy()||state.permissions==='read-only')return;
@@ -2874,6 +2880,7 @@
     workflow:()=>$('show-workflow').click(),
     build:async()=>{show('build-dialog');sidebar(false);await loadBuild();}
   });
+  window.GitHubAccountUI?.init({call,getState:()=>({...state,terminal:terminalState}),isBusy:projectWorkBusy,show,close,t,toast,openSetup:()=>window.AndroidSetupUI?.open()});
   window.AndroidSetupUI?.init({call,getState:()=>({...state,terminal:terminalState}),show,close,t,renderTerminal});
   window.AndroidWorkflowUI?.init({call,getState:()=>({...state,terminal:terminalState,androidAccountScope:accountScope(state.account)}),show,close,t,toast,renderTerminal});
   window.AndroidAssistantUI?.init({call, getState:()=>({...state,terminal:terminalState,androidAccountScope:accountScope(state.account)}), show, close, t, toast, openTerminal:terminal=>{close('android-assistant-dialog');close('build-dialog');show('terminal-dialog');renderTerminal(terminal);}});

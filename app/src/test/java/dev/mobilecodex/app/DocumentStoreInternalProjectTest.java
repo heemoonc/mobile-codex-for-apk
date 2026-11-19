@@ -7,6 +7,12 @@ public class DocumentStoreInternalProjectTest {
  Context context;String folder="internal-test-"+java.util.UUID.randomUUID();
  @Before public void setup(){context=RuntimeEnvironment.getApplication();context.getSharedPreferences("projects",0).edit().clear().commit();context.getSharedPreferences("workspace",0).edit().clear().commit();}
  @After public void cleanup()throws Exception{Path p=new File(context.getFilesDir(),"android-projects/"+folder).toPath();if(Files.exists(p))try(var paths=Files.walk(p)){for(Path f:paths.sorted(java.util.Comparator.reverseOrder()).toList())Files.deleteIfExists(f);}}
+ @Test public void addingUnselectedProjectPreservesCurrentWorkspaceAndPersistsBoth()throws Exception{
+  DocumentStore store=new DocumentStore(context);String previous=store.key();File cwd=store.directDirectory();
+  var created=store.createAndroidProject("추가 앱","com.example.extra",folder,"java",name->context.getAssets().open("android-sample/"+name),null,false);
+  assertNotEquals(previous,created.getString("key"));assertEquals(previous,store.key());assertEquals(cwd,store.directDirectory());
+  DocumentStore reopened=new DocumentStore(context);assertEquals(previous,reopened.key());reopened.selectProject(created.getString("key"));assertTrue(new File(reopened.directDirectory(),"build.gradle").isFile());
+ }
  @Test public void internalProjectSharesFileAndCwdRootAndRestoresAfterReopen()throws Exception{
   DocumentStore store=new DocumentStore(context);var created=store.createAndroidProject("한글 앱","com.example.named",folder,name->context.getAssets().open("android-sample/"+name));String key=created.getString("key");
   File root=new File(context.getFilesDir(),"android-projects/"+folder);assertEquals(root.getCanonicalFile(),store.directDirectory());assertTrue(store.workspace().getBoolean("available"));

@@ -676,7 +676,7 @@ public final class Engine {
             try {
                 if (sessionStore.recoveryRequired() && action.startsWith("chat.") && !action.equals("chat.stop"))
                     throw new DiagnosticFailure.StorageFailure(t("대화 기록을 저장할 수 없습니다. 복구가 필요합니다. 원본은 보존되어 있습니다."), null);
-                if (Set.of("terminal.run", "build.run", "build.check", "android.setup.check", "android.setup.linux", "android.setup.download", "files.mutate", "changes.restore", "recovery.restore").contains(action) && (!roomLeases.isEmpty() || (roomCommand != null && roomCommand.isAlive())))
+                if (Set.of("terminal.run", "build.run", "build.check", "android.setup.check", "android.setup.git", "github.auth.login", "github.auth.check", "android.setup.linux", "android.setup.download", "files.mutate", "changes.restore", "recovery.restore").contains(action) && (!roomLeases.isEmpty() || (roomCommand != null && roomCommand.isAlive())))
                     throw new IOException(t("초대한 에이전트의 작업을 중지한 뒤 파일이나 명령을 실행해 주세요."));
                 switch (action) {
                     case "sessions.storage" -> reply.complete(sessionStore.status(), null);
@@ -710,12 +710,39 @@ public final class Engine {
                         models = latest; publish(); reply.complete(obj("models", models), null);
                     }
                     case "devtools.check" -> { JSONObject result = devTools.check(codexHome.root(), runtimeAliases()); publish(); reply.complete(result, null); }
+                    case "github.auth.info" -> reply.complete(obj("linux",linux.status(),"account",context.getSharedPreferences("github-account",0).getString("account","")),null);
+                    case "github.auth.login", "github.auth.check" -> {
+                        androidWritable();linux.buildToolRoot();
+                        File cwd=new File(context.getCacheDir(),"github-account");if(!cwd.isDirectory()&&!cwd.mkdirs())throw new IOException("Cannot create GitHub login directory");
+                        JSONObject launched=runTerminal(dev.mobilecodex.app.core.GitHubAccount.command(action.equals("github.auth.login")),null,null,cwd);
+                        githubAuthTerminalId=launched.getString("id");reply.complete(launched,null);
+                    }
+                    case "github.auth.result" -> {
+                        String id=args.optString("id");JSONObject current=terminal.snapshot();
+                        boolean owned=!id.isBlank()&&id.equals(githubAuthTerminalId)&&id.equals(current.optString("id"));
+                        String account=owned&&!current.optBoolean("running")?dev.mobilecodex.app.core.GitHubAccount.account(current.optInt("exitCode",-1),current.optString("output")):"";
+                        if(!account.isBlank())context.getSharedPreferences("github-account",0).edit().putString("account",account).apply();
+                        reply.complete(obj("id",id,"owned",owned,"running",owned&&current.optBoolean("running"),"verified",!account.isBlank(),"account",account,"code",owned?dev.mobilecodex.app.core.GitHubAccount.code(current.optString("output")):""),null);
+                    }
                     case "android.setup.status" -> reply.complete(androidSetupStatus(),null);
                     case "android.setup.linux" -> {
                         androidWritable();
                         if(linux.status().optBoolean("installed"))linux.setEnabled(true);
                         else { context.startForegroundService(new Intent(context,EngineService.class));linux.install(codexHome.root(),runtimeAliases()); }
                         serverThreadId="";publish();reply.complete(androidSetupStatus(),null);
+                    }
+                    case "android.setup.git" -> {
+                        androidWritable();linux.buildToolRoot();
+                        File cwd=new File(context.getCacheDir(),"android-setup-check");
+                        if(!cwd.isDirectory()&&!cwd.mkdirs())throw new IOException("Cannot create setup check directory");
+                        JSONObject launched=runTerminal(dev.mobilecodex.app.core.LinuxGitSetup.command(),null,null,cwd);
+                        androidGitTerminalId=launched.getString("id");reply.complete(launched,null);
+                    }
+                    case "android.setup.git.result" -> {
+                        String id=args.optString("id");JSONObject current=terminal.snapshot();
+                        boolean ok=!id.isBlank()&&id.equals(androidGitTerminalId)&&id.equals(current.optString("id"))&&!current.optBoolean("running")
+                            &&dev.mobilecodex.app.core.LinuxGitSetup.passed(current.optInt("exitCode",-1),current.optString("output"));
+                        reply.complete(obj("id",id,"verified",ok),null);
                     }
                     case "android.setup.download.info" -> reply.complete(androidDownloadInfo(),null);
                     case "android.setup.download" -> {
@@ -987,11 +1014,12 @@ public final class Engine {
                         sourceWork(()->{projectGit().push(args.getString("head"),args.getString("origin"),args.getString("branch"));return null;});reply.complete(obj("pushed",true),null);
                     }
                     case "projects.android.create" -> {
-                        ensureRuntimeSettingsIdle();
+                        if(sourceBusy||sourceCopyBusy||apkCopyBusy)throw new IOException(t("프로젝트 파일 작업을 먼저 마쳐 주세요."));
+                        boolean preserveActive=args.optBoolean("keepCurrent")||busy||hasRunningTurns()||hasProOperations()||!liveRemote.isBlank()||!roomLeases.isEmpty()||group!=null||(roomCommand!=null&&roomCommand.isAlive())||terminal.busy()||loginInProgress||(agentBridge!=null&&agentBridge.busy())||linux.status().optBoolean("busy");
                         if(permissionMode.equals("read-only"))throw new IOException(t("읽기 전용 모드에서는 프로젝트를 만들 수 없습니다."));
-                        String template=args.optString("template","java");
-                        JSONObject created=documents.createAndroidProject(args.getString("name"),args.getString("packageName"),args.getString("folder"),template,name->context.getAssets().open("android-sample/"+name),name->context.getAssets().open("android-templates/"+template+"/"+name));
-                        clearActive();publish();reply.complete(created,null);
+                        String template=args.optString("template","compose");
+                        JSONObject created=documents.createAndroidProject(args.getString("name"),args.getString("packageName"),args.getString("folder"),template,name->context.getAssets().open("android-sample/"+name),name->context.getAssets().open("android-templates/"+template+"/"+name),!preserveActive);
+                        if(!preserveActive)clearActive();created.put("activePreserved",preserveActive);publish();reply.complete(created,null);
                     }
                     case "projects.create" -> { ensureEngineIdle(); JSONObject created = documents.createProject(args.getString("name")); clearActive(); publish(); reply.complete(created, null); }
                     case "projects.merge" -> { ensureEngineIdle(); JSONObject merged = documents.mergeProjects(args.getString("sourceKey"), args.getString("targetKey")); publish(); reply.complete(merged, null); }
@@ -1481,7 +1509,7 @@ public final class Engine {
             + (documents.directDirectory() != null) + ". The exact model requested for this thread is "
             + (model == null || model.isBlank() ? "not available from the runtime" : model)
             + ". When the user asks which model you are, report that exact requested model id."
-            + linuxInstructions(linux.status()) + ChatIconInstructions.forEnabled(chatIconsEnabled);
+            + dev.mobilecodex.app.core.ForkAppInstructions.TEXT + linuxInstructions(linux.status()) + ChatIconInstructions.forEnabled(chatIconsEnabled);
     }
     static String linuxInstructions(JSONObject state) {
         if (!state.optBoolean("installed") || !state.optBoolean("enabled"))
@@ -1784,7 +1812,13 @@ public final class Engine {
     private byte[] gitCommand(File directory,List<String> arguments,int seconds)throws Exception {
         if(arguments.get(0).equals("push")||(arguments.size()>2&&arguments.get(0).equals("-c")&&arguments.get(2).equals("clone")))dev.mobilecodex.app.core.GitProjects.networkConfig(new String(gitCommand(directory,List.of("config","--null","--list"),30),StandardCharsets.UTF_8));
         File prefix=devTools.prepare();List<String> argv=new ArrayList<>();argv.add(new File(prefix,"bin/git").getAbsolutePath());
-        argv.addAll(List.of("--no-pager","--literal-pathspecs","-c","core.hooksPath=/dev/null","-c","core.fsmonitor=false","-c","protocol.file.allow=never","-c","protocol.ext.allow=never","-c","protocol.allow=never","-c","protocol.https.allow=always","-c","http.followRedirects=false","-c","http.sslVerify=true","-c","filter.lfs.required=false","-c","filter.lfs.smudge=","-c","filter.lfs.clean=","-c","filter.lfs.process="));argv.addAll(arguments);
+        argv.addAll(List.of("--no-pager","--literal-pathspecs","-c","core.hooksPath=/dev/null","-c","core.fsmonitor=false","-c","protocol.file.allow=never","-c","protocol.ext.allow=never","-c","protocol.allow=never","-c","protocol.https.allow=always","-c","http.followRedirects=false","-c","http.sslVerify=true","-c","filter.lfs.required=false","-c","filter.lfs.smudge=","-c","filter.lfs.clean=","-c","filter.lfs.process="));
+        if(!context.getSharedPreferences("github-account",0).getString("account","").isBlank()&&linux.status().optBoolean("enabled")) {
+            linux.buildToolRoot();
+            List<String> helper=linux.command(dev.mobilecodex.app.core.GitHubAccount.helperCommand(),directory,codexHome.root(),runtimeAliases()).command();
+            argv.addAll(List.of("-c","credential.https://github.com.helper=","-c","credential.https://github.com.helper="+dev.mobilecodex.app.core.GitHubAccount.helper(helper)));
+        }
+        argv.addAll(arguments);
         ProcessBuilder builder=new ProcessBuilder(argv).directory(directory);devTools.configure(builder,codexHome.root(),runtimeAliases());
         for(String key:List.of("GIT_DIR","GIT_WORK_TREE","GIT_COMMON_DIR","GIT_INDEX_FILE","GIT_OBJECT_DIRECTORY","GIT_ALTERNATE_OBJECT_DIRECTORIES"))builder.environment().remove(key);
         builder.environment().put("GIT_TERMINAL_PROMPT","0");builder.environment().put("GCM_INTERACTIVE","never");return ProcessOutput.run(builder,16*1024*1024,seconds);
@@ -3335,7 +3369,7 @@ public final class Engine {
         return DeveloperBuild.copyApk(buildDirectory().toPath(),args.getString("path"),new File(context.getCacheDir(),"build-apks").toPath(),DeveloperBuild.MAX_APK_BYTES).toFile();
     }
     public boolean buildScopeMatches(String key) {return key!=null&&key.equals(documents.key());}
-    private String androidSetupTerminalId="",androidDownloadTerminalId="";
+    private String androidSetupTerminalId="",androidDownloadTerminalId="",androidGitTerminalId="",githubAuthTerminalId="";
     private String setupAsset(String name) throws IOException {
         try(InputStream input=context.getAssets().open(name);ByteArrayOutputStream output=new ByteArrayOutputStream()) {
             byte[] block=new byte[4096];int count;
@@ -3357,6 +3391,7 @@ public final class Engine {
         if(linuxStatus.optBoolean("installed")&&linuxStatus.optBoolean("enabled")&&!linuxStatus.optBoolean("busy"))
             info=dev.mobilecodex.app.core.AndroidSetup.inspect(linux.buildToolRoot().toPath())
                 .put("installExists",Files.exists(new File(linux.buildToolRoot(),"opt/android").toPath(),java.nio.file.LinkOption.NOFOLLOW_LINKS));
+        info.put("gitPresent",linuxStatus.optBoolean("installed")&&linuxStatus.optBoolean("enabled")&&!linuxStatus.optBoolean("busy")&&new File(linux.buildToolRoot(),"usr/bin/git").isFile());
         return info.put("linux",linuxStatus).put("archiveFilename","Android-Build-Tools-75b5b1d6.zip")
             .put("archiveBytes",321233564L).put("expandedBytes",598791639L)
             .put("availableBytes",new android.os.StatFs(context.getFilesDir().getAbsolutePath()).getAvailableBytes());

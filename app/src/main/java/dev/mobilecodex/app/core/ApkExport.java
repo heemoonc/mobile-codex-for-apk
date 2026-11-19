@@ -6,6 +6,11 @@ import java.nio.file.attribute.BasicFileAttributes;
 
 /** One Activity's native-only APK save request. Never owns the project's source APK. */
 public final class ApkExport {
+    public static String fileName(String project,long buildNumber) {
+        String name=(project==null?"":project).replaceAll("[\\p{Cntrl}/\\\\:*?\"<>|]","_").trim().replaceAll("^[. ]+|[. ]+$","");
+        if(name.isBlank())name="Android-app";if(name.length()>80)name=name.substring(0,80);
+        return name+"-build"+buildNumber+".apk";
+    }
     public record Pending(String requestId,String scope,Path file) {}
     private String requestId,scope;
     private Path file;

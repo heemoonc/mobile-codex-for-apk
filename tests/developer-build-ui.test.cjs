@@ -160,7 +160,7 @@ async function openNewAndroid(ui){await tick();ui.d.getElementById('add-project'
 function fillNewAndroid(ui){ui.d.getElementById('android-project-name').value='나의 앱';ui.d.getElementById('android-project-package').value='com.example.myapp';ui.d.getElementById('android-project-folder').value='나의 앱';}
 test('named Android project form creates once and closes only on success',async()=>{
  let release;const ui=setup({'projects.android.create':()=>new Promise(r=>release=r)});await openNewAndroid(ui);fillNewAndroid(ui);
- const form=ui.d.getElementById('android-project-form');form.dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();form.dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();assert.equal(ui.calls.filter(m=>m.action==='projects.android.create').length,1);assert.deepEqual(ui.calls.find(m=>m.action==='projects.android.create').args,{name:'나의 앱',packageName:'com.example.myapp',folder:'나의 앱',template:'java'});assert.equal(ui.d.getElementById('android-project-submit').disabled,true);
+ const form=ui.d.getElementById('android-project-form');form.dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();form.dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();assert.equal(ui.calls.filter(m=>m.action==='projects.android.create').length,1);assert.deepEqual(ui.calls.find(m=>m.action==='projects.android.create').args,{name:'나의 앱',packageName:'com.example.myapp',folder:'나의 앱',template:'compose'});assert.equal(ui.d.getElementById('android-project-submit').disabled,true);
  release({key:'new-project'});await tick();assert.equal(ui.d.getElementById('android-project-dialog').open,false);assert.match(ui.d.getElementById('toast').textContent,/만들/);
 });
 test('named Android project errors preserve input and allow retry',async()=>{
@@ -272,7 +272,7 @@ for(const free of [0,1073741824,null])test('environment summary reports configur
 });
 
 for(const template of ['java','kotlin','compose'])test('new Android template selection sends explicit profile '+template,async()=>{
- const ui=setup({'projects.android.create':()=>({key:'created'})});await openNewAndroid(ui);fillNewAndroid(ui);const select=ui.d.getElementById('android-project-template');assert.ok(select);assert.equal(select.value,'java');select.value=template;ui.d.getElementById('android-project-form').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();assert.equal(ui.calls.find(m=>m.action==='projects.android.create').args.template,template);assert.equal(ui.calls.some(m=>m.action==='build.run'),false);
+ const ui=setup({'projects.android.create':()=>({key:'created'})});await openNewAndroid(ui);fillNewAndroid(ui);const select=ui.d.getElementById('android-project-template');assert.ok(select);assert.equal(select.value,'compose');select.value=template;ui.d.getElementById('android-project-form').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();assert.equal(ui.calls.find(m=>m.action==='projects.android.create').args.template,template);assert.equal(ui.calls.some(m=>m.action==='build.run'),false);
 });
 
 test('history request remains stale after leaving and returning to the same conversation',async()=>{

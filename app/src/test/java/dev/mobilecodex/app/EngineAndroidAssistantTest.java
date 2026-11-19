@@ -31,6 +31,27 @@ public class EngineAndroidAssistantTest {
   engine.handle(action,args,(value,error)->{if(error!=null)result.completeExceptionally(error);else result.complete(value);});
   return result.get(20,TimeUnit.SECONDS);
  }
+ @Test public void creatingProjectDuringWorkPreservesActiveStateAndWorkspace() throws Exception {
+  var field=Engine.class.getDeclaredField("busy");field.setAccessible(true);field.setBoolean(engine,true);
+  String folder="parallel-"+java.util.UUID.randomUUID();
+  JSONObject created=request("projects.android.create",obj("name","추가 앱","packageName","com.example.extra","folder",folder,"template","java"));
+  assertTrue(created.getBoolean("activePreserved"));assertTrue(field.getBoolean(engine));
+  assertNotEquals(key,created.getString("key"));assertEquals(key,request("state",obj()).getJSONObject("workspace").getString("key"));
+ }
+ @Test public void capturedPreserveIntentStillKeepsWorkspaceAfterWorkFinishes() throws Exception {
+  String folder="preserve-"+java.util.UUID.randomUUID();
+  JSONObject created=request("projects.android.create",obj("name","추가 앱","packageName","com.example.extra","folder",folder,"template","java","keepCurrent",true));
+  assertTrue(created.getBoolean("activePreserved"));assertEquals(key,request("state",obj()).getJSONObject("workspace").getString("key"));
+ }
+ @Test public void readonlyProjectCreationIsStillRejected() throws Exception {
+  request("permissions.set",obj("mode","read-only"));
+  assertThrows(ExecutionException.class,()->request("projects.android.create",obj("name","추가 앱","packageName","com.example.extra","folder","readonly-extra","template","java")));
+ }
+ @Test public void githubConnectionCannotBorrowTerminalEvidenceOrStartWithoutLinux()throws Exception {
+  JSONObject info=request("github.auth.info",obj());assertTrue(info.has("linux"));
+  JSONObject result=request("github.auth.result",obj("id","unowned"));assertFalse(result.getBoolean("owned"));assertFalse(result.getBoolean("verified"));assertEquals("",result.getString("code"));
+  assertThrows(ExecutionException.class,()->request("github.auth.login",obj()));
+ }
  @Test public void setupInspectionNeedsNoProjectOrLoginAndCannotBorrowAnotherTerminal() throws Exception {
   JSONObject setup=request("android.setup.status",obj());assertTrue(setup.has("linux"));assertFalse(setup.getBoolean("executionVerified"));
   assertFalse(request("android.setup.result",obj("id","other")).getBoolean("verified"));

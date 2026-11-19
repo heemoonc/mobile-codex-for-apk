@@ -118,18 +118,26 @@ public final class DocumentStore {
         return createAndroidProject(name,packageName,folder,"java",assets,null);
     }
     public synchronized JSONObject createAndroidProject(String name,String packageName,String folder,String template,SampleProject.Assets assets,SampleProject.Assets profileAssets)throws IOException {
+        return createAndroidProject(name,packageName,folder,template,assets,profileAssets,true);
+    }
+    public synchronized JSONObject createAndroidProject(String name,String packageName,String folder,String template,SampleProject.Assets assets,SampleProject.Assets profileAssets,boolean selectCreated)throws IOException {
         AndroidProject.Config config=AndroidProject.validate(new AndroidProject.Config(name,packageName,folder));
         File parent=new File(context.getFilesDir(),"android-projects");
         if(Files.isSymbolicLink(parent.toPath())||!parent.getCanonicalFile().getParentFile().equals(context.getFilesDir().getCanonicalFile()))throw new IOException(t("프로젝트 저장 위치가 올바르지 않습니다."));
         JSONObject mapping=internalFolders();
         java.nio.file.Path generated=AndroidProject.create(parent.toPath(),config,assets,template,profileAssets);
-        return registerInternal(config.name(),config.folder(),generated,mapping);
+        return registerInternal(config.name(),config.folder(),generated,mapping,selectCreated);
     }
     private JSONObject registerInternal(String name,String folder,java.nio.file.Path generated,JSONObject mapping)throws IOException {
-        String id=UUID.randomUUID().toString();ProjectRegistry staged=ProjectRegistry.fromJson(projects.toJson());staged.put("mobilecodex-internal:"+id,name,null);
+        return registerInternal(name,folder,generated,mapping,true);
+    }
+    private JSONObject registerInternal(String name,String folder,java.nio.file.Path generated,JSONObject mapping,boolean selectCreated)throws IOException {
+        String previous=projects.selectedKey();
+        String id=UUID.randomUUID().toString();ProjectRegistry staged=ProjectRegistry.fromJson(projects.toJson());String createdKey=staged.put("mobilecodex-internal:"+id,name,null).key;
+        if(!selectCreated)staged.select(previous);
         try{mapping.put(id,folder);if(!context.getSharedPreferences("projects",0).edit().putString("registry",staged.toJson()).putString("internal-folders-v1",mapping.toString()).commit())throw new IOException(t("프로젝트 목록을 저장하지 못했습니다."));}
         catch(Exception error){throw new IOException(t("프로젝트 폴더는 생성됐지만 목록에 연결하지 못했습니다. 남은 폴더: ")+generated,error);}
-        projects=staged;tree=null;label=name;return workspace();
+        projects=staged;if(selectCreated){tree=null;label=name;return workspace();}return obj("key",createdKey,"name",name,"selected",false,"available",true);
     }
     interface GitClone { void run(java.nio.file.Path target)throws Exception; }
     public synchronized JSONObject cloneGitProject(String name,String folder,GitClone clone)throws Exception {

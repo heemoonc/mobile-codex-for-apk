@@ -2,7 +2,7 @@
 
 [Overview](../README.md) · [한국어 매뉴얼](MANUAL.ko.md) · [Latest APK](https://github.com/heemoonc/mobile-codex-for-apk/releases/latest)
 
-This guide describes **0.3.9-apk-dev44**. Creating projects, preparing tools and building do not require ChatGPT or GitHub. AI conversations require an eligible account and internet access. Korean labels below match the installed UI; translated labels depend on language settings.
+This guide describes **0.3.9-apk-dev57**. Creating projects, preparing tools and building do not require ChatGPT or GitHub. AI conversations require an eligible account and internet access. Korean labels below match the installed UI; translated labels depend on language settings.
 
 ## 1. Install and update
 
@@ -87,9 +87,9 @@ GitHub is optional and useful for history, backup, collaboration and releases.
 3. Enter a message and confirm a local commit of selected files. This does not upload.
 4. Separately confirm the remote, branch and commit before uploading. Upload sends the current branch's commits, including earlier history; review that history for secrets. No force push is used.
 
-Only GitHub HTTPS remotes are supported by this screen. It does not create GitHub repositories or change visibility. Private repositories require account authentication and access. ChatGPT's GitHub connector, bundled Android Git and Linux Git have separate authentication.
+Only GitHub HTTPS remotes are supported by this screen. It does not create GitHub repositories or change visibility. Private repositories require account authentication and access. ChatGPT's GitHub connector is separate. The GitHub account screen connects Linux Git and the app Git credential helper.
 
-New local projects without history need initialization, an origin and author settings. **This screen uses bundled Android Git: configure it through the app terminal with Linux disabled**, then re-enable Linux for builds.
+New local projects without history need initialization, an origin and author settings. Configure project-local author settings through the terminal. Keep Linux enabled when using the shared GitHub CLI connection.
 
 ```sh
 git init -b main
@@ -98,7 +98,7 @@ git config user.email "YOUR_GITHUB_NOREPLY_EMAIL"
 git remote add origin https://github.com/OWNER/REPOSITORY.git
 ```
 
-Author settings are not authentication. Configure your own Git credential method separately; never place tokens or private keys in chats or source. Folder copies and source backup ZIPs exclude `.git`; GitHub import creates a shallow clone (`--depth=1`) with the remote and latest commit, without fetching the full earlier history. A source ZIP does not back up the installed Linux environment, tools or credentials.
+Author settings are not authentication. Use the GitHub account screen for authentication; never place tokens or private keys in chats or source. Folder copies and source backup ZIPs exclude `.git`; GitHub import creates a shallow clone (`--depth=1`) with the remote and latest commit, without fetching the full earlier history. A source ZIP does not back up the installed Linux environment, tools or credentials.
 
 ## 8. Troubleshooting
 
@@ -121,3 +121,9 @@ Character packs default to off on a fresh installation, with no character displa
 ## Modifying this client
 
 Prepare the normal app-development environment through the menus above. Follow the [contributor build guide](BUILDING.en.md) only when modifying and rebuilding Mobile Codex for APK itself.
+
+Linux Git is included in **1. Prepare Linux and Git**. The explicit setup action reuses a working Git; otherwise it updates Arch package lists/system packages and installs Git with CA certificates. Internet access and additional downloads may be required. Existing installations can use the same action. Execution verification checks `git --version`. App capabilities and tool paths are supplied to the AI as app-wide instructions; project `AGENTS.md` files are preserved.
+
+Start **Tools → Connect GitHub account** to prepare the official GitHub CLI in Linux. Copy the code, select **Authorize on GitHub**, authorize in your browser, and return to the app. Linux Git and app Git use this connection through the CLI credential helper; Linux must stay enabled for app Git authentication. If no system credential store is available, GitHub CLI may store credentials in its plain-text configuration file in app-private Linux. Signing in does not upload anything.
+
+You can add a new Android project while another conversation is working. The current workspace and conversation remain selected; the new project is added to the list. APK export suggests Downloads and a `ProjectName-build12.apk` filename. Complete the save in the Android document picker.

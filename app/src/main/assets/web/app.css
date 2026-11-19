@@ -4,7 +4,8 @@
    44px touch targets with smaller visible shapes where density matters. */
 
 /* ---------- Foundation ---------- */
-*, *::before, *::after { box-sizing: border-box; }
+/* WebView also highlights clickable labels and their descendants. */
+*, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html { height: 100%; overflow: hidden; font-family: var(--font); font-size: 15px; -webkit-text-size-adjust: 100%; }
 body {
   margin: 0; height: 100%; height: var(--app-height, 100%);
@@ -13,7 +14,7 @@ body {
   font-size: var(--fs-base); line-height: 1.5;
   -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
 }
-button, input, textarea, select { font: inherit; color: inherit; }
+button, input, textarea, select { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent; }
 button {
   margin: 0; padding: 0; border: 0; background: none; cursor: pointer;
   touch-action: manipulation; -webkit-tap-highlight-color: transparent;
@@ -96,9 +97,13 @@ select,
   transition: border-color var(--fast) ease, box-shadow var(--fast) ease;
 }
 .text-input { margin: var(--s-2) 0 var(--s-3); }
-.text-input:focus, select:focus-visible, .question input:focus { border-color: var(--focus); box-shadow: 0 0 0 3px var(--fill-2); outline: none; }
+.text-input:focus, select:focus-visible, .question input:focus { border-color: var(--focus); box-shadow: inset 0 0 0 2px var(--fill-2); outline: none; }
 .settings-row select {
   flex: 0 0 auto; width: auto; min-width: 156px; max-width: 100%;
+}
+/* Shared arrow spacing for every single-choice select, including dynamic forms. */
+:root select:not([multiple]):not([size]),
+:root select[size="1"]:not([multiple]) {
   appearance: none; -webkit-appearance: none;
   padding-inline: var(--s-3) calc(var(--s-3) + 16px + var(--s-2));
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999999' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
@@ -639,7 +644,7 @@ button.device-code:hover { background: var(--fill-2); }
 }
 #file-actions button:hover, #session-actions button:hover, .project-actions button:hover { background: var(--fill-2); }
 .project-actions .nav-button svg { color: var(--text-2); }
-.project-choice { display: flex; flex-direction: column; align-items: flex-start !important; justify-content: center; gap: 2px; padding: var(--s-2) var(--s-3) !important; white-space: normal; overflow-wrap: anywhere; }
+.project-choice { display: flex; flex-direction: column; align-items: flex-start !important; justify-content: center; gap: 2px; padding: var(--s-3) var(--s-6) !important; border-radius: var(--r-2xl); white-space: normal; overflow-wrap: anywhere; }
 .project-choice small { max-width: 100%; color: var(--text-2); font-size: var(--fs-xs); white-space: pre-wrap; }
 #project-link-description { max-height: 32dvh; margin: 0 0 var(--s-3); overflow: auto; line-height: 1.6; overflow-wrap: anywhere; white-space: pre-wrap; }
 #project-link-description:empty { display: none; }
@@ -1034,3 +1039,48 @@ dialog > .toast { position: sticky; top: 0; bottom: auto; left: auto; z-index: 2
 #android-git-dialog .git-files label { flex-direction:row; align-items:flex-start; overflow-wrap:anywhere; }
 .git-files input { flex:none; width:20px; height:20px; }
 #ag-remote, #ag-status, #ag-project { overflow-wrap:anywhere; white-space:pre-wrap; }
+
+/* Setup states retain text labels as well as color in both themes. */
+#android-setup-dialog [data-setup-state="pending"] { color:#b42318; }
+#android-setup-dialog [data-setup-state="complete"] { color:#18723c; }
+#android-setup-dialog [data-setup-state="running"] { color:#175cd3; }
+html[data-theme=dark] #android-setup-dialog [data-setup-state="pending"] { color:#ff9d95; }
+html[data-theme=dark] #android-setup-dialog [data-setup-state="complete"] { color:#7fdcb9; }
+html[data-theme=dark] #android-setup-dialog [data-setup-state="running"] { color:#91baff; }
+
+#as-download-spinner { color:#175cd3; flex-shrink:0; }
+html[data-theme=dark] #as-download-spinner { color:#91baff; }
+#as-download-progress { margin-top:12px; }
+
+/* Keep control focus feedback inside its rounded hit area. */
+button:focus-visible { outline-offset:-3px; }
+select:active { box-shadow:inset 0 0 0 2px var(--focus); }
+
+/* Shared in-app dropdown; hidden select remains the form/event binding. */
+.dropdown { display:block; position:relative; min-width:0; width:100%; }
+.dropdown-source { display:none !important; }
+.dropdown-field { margin:var(--s-2) 0 var(--s-3); }
+.dropdown-trigger { display:flex; align-items:center; justify-content:space-between; gap:8px; width:100%; min-height:var(--touch); padding:0 12px; border:1px solid var(--border); border-radius:var(--r-md); background:var(--surface); color:var(--text); font-size:var(--fs-md); text-align:left; }
+.dropdown-trigger > span:first-child { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.dropdown-trigger:active:not(:disabled),.dropdown-trigger[aria-expanded=true] { box-shadow:inset 0 0 0 2px var(--focus); }
+.dropdown-arrow { width:16px; height:16px; flex:0 0 16px; display:grid; place-items:center; }
+.dropdown-arrow::after { content:''; width:7px; height:7px; border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor; transform:translateY(-2px) rotate(45deg); }
+.dropdown-trigger[aria-expanded=true] .dropdown-arrow::after { transform:translateY(2px) rotate(225deg); }
+.dropdown-list { display:block; position:absolute; z-index:100; inset:calc(100% + 4px) 0 auto; max-height:min(280px,40vh); overflow:auto; overscroll-behavior:contain; padding:4px; border:1px solid var(--border); border-radius:var(--r-md); background:var(--surface); box-shadow:var(--shadow-pop); }
+.dropdown-above .dropdown-list { top:auto; bottom:calc(100% + 4px); }
+.dropdown-list > button { display:block; width:100%; min-height:44px; padding:10px 12px; border-radius:var(--r-sm); text-align:left; white-space:normal; overflow-wrap:anywhere; font-size:var(--fs-md); }
+.dropdown-list > button:hover:not(:disabled),.dropdown-list > button[aria-selected=true] { background:var(--fill-2); }
+.settings-row > .dropdown { flex:0 0 auto; width:auto; min-width:156px; max-width:100%; }
+.live-setting > .dropdown { max-width:65%; }
+.agent-field .dropdown-trigger { background:var(--fill-1); font-size:var(--fs-sm); }
+
+.login-code-row { display:flex; align-items:center; gap:var(--s-3); margin:var(--s-3) 0 var(--s-4); }
+.login-code-row .device-code { flex:1; min-width:0; margin:0; font-size:clamp(20px,5vw,26px); overflow-wrap:anywhere; }
+#copy-login-code { flex:none; }
+
+#github-account-dialog [data-setup-state="pending"] { color:#b42318; }
+#github-account-dialog [data-setup-state="complete"] { color:#18723c; }
+#github-account-dialog [data-setup-state="running"] { color:#175cd3; }
+html[data-theme=dark] #github-account-dialog [data-setup-state="pending"] { color:#ff9d95; }
+html[data-theme=dark] #github-account-dialog [data-setup-state="complete"] { color:#7fdcb9; }
+html[data-theme=dark] #github-account-dialog [data-setup-state="running"] { color:#91baff; }

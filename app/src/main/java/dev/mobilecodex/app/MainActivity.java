@@ -49,7 +49,7 @@ public final class MainActivity extends Activity implements Engine.Ui {
         String path = uri.getPath();
         if (!"https".equals(uri.getScheme()) || !HOST.equals(uri.getHost()) || path == null
                 || !(path.equals("/index.html") || path.equals("/app.css") || path.equals("/visual-system.css") || path.equals("/spacing.css")
-                || path.equals("/app.js") || path.equals("/android-assistant.js") || path.equals("/android-workflow.js") || path.equals("/android-setup.js") || path.equals("/android-start.js") || path.equals("/ui-core.js") || path.equals("/translations.js") || path.equals("/locale.js") || path.equals("/agents-ui.js") || path.equals("/agents.css") || path.equals("/live.js") || path.equals("/live.css") || path.equals("/reports.js"))) {
+                || path.equals("/app.js") || path.equals("/dropdown-ui.js") || path.equals("/github-account.js") || path.equals("/android-assistant.js") || path.equals("/android-workflow.js") || path.equals("/android-setup.js") || path.equals("/android-start.js") || path.equals("/ui-core.js") || path.equals("/translations.js") || path.equals("/locale.js") || path.equals("/agents-ui.js") || path.equals("/agents.css") || path.equals("/live.js") || path.equals("/live.css") || path.equals("/reports.js"))) {
             return deniedResponse();
         }
         String mime = path.endsWith(".css") ? "text/css" : path.endsWith(".js") ? "application/javascript" : "text/html";
@@ -453,12 +453,14 @@ public final class MainActivity extends Activity implements Engine.Ui {
                 engine.beginApkCopy();
                 File copy=engine.prepareBuildApk(args);
                 if(!apkExport.prepared(id,copy.toPath()))return;
+                android.content.pm.PackageInfo metadata=getPackageManager().getPackageArchiveInfo(copy.getAbsolutePath(),0);
+                if(metadata==null)throw new java.io.IOException(t("APK 정보를 읽을 수 없습니다."));
+                String name=dev.mobilecodex.app.core.ApkExport.fileName(engine.documents.workspace().optString("name","Android-app"),metadata.getLongVersionCode());
                 runOnUiThread(()->{
                     try{
                         if(!engine.buildScopeMatches(scope))throw new java.io.IOException(t("프로젝트가 바뀌었습니다. APK 저장을 다시 시작하십시오."));
                         if(sourceDestroyed){apkExport.cancel();return;}
-                        String path=args.getString("path"),name=path.substring(path.lastIndexOf('/')+1);
-                        startActivityForResult(new Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("application/vnd.android.package-archive").putExtra(Intent.EXTRA_TITLE,name),EXPORT_APK);
+                        startActivityForResult(new Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("application/vnd.android.package-archive").putExtra(Intent.EXTRA_TITLE,name).putExtra(android.provider.DocumentsContract.EXTRA_INITIAL_URI,android.provider.DocumentsContract.buildRootUri("com.android.providers.downloads.documents","downloads")),EXPORT_APK);
                     }catch(Exception error){try{apkExport.cancel();}catch(java.io.IOException ignored){}respond(id,null,error);}
                 });
             }catch(Exception error){try{apkExport.cancel();}catch(java.io.IOException ignored){}respond(id,null,error);}
@@ -957,6 +959,9 @@ public final class MainActivity extends Activity implements Engine.Ui {
                     String content = args.getString("content");
                     dev.mobilecodex.app.core.sync.PortableProjects.parse(content, true);
                     runOnUiThread(() -> chooseProjectFile(id, content)); return;
+                }
+                if (action.equals("ui.githubLoginBrowser")) {
+                    runOnUiThread(() -> { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/login/device"))); respond(id, obj("ok", true), null); }); return;
                 }
                 if (action.equals("ui.loginBrowser")) {
                     Uri uri = Uri.parse(args.getString("url"));

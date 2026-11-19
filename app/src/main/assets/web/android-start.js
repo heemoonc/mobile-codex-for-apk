@@ -14,7 +14,8 @@ function controls(){
  $('ag-commit').disabled=stop||!snapshot||!workspace();$('ag-push').disabled=stop||!snapshot?.head||!snapshot?.origin||!snapshot?.branch||!workspace();$('ag-refresh').disabled=busy||api.isBusy()||!workspace();
  $('ag-message').disabled=stop;$('ag-review').disabled=busy||api.isBusy()||!workspace();
  $('ag-files').querySelectorAll('input').forEach(e=>e.disabled=stop||e.dataset.selectable!=='true');
- for(const id of ['ad-create','ad-folder','ad-zip','ad-github'])$(id).disabled=stop;
+ for(const id of ['ad-folder','ad-zip','ad-github'])$(id).disabled=stop;
+ $('ad-create').disabled=busy||!(api.canCreate?api.canCreate():!stop);
  for(const id of ['ad-workflow','ad-build','ad-git'])$(id).disabled=stop||!workspace();
  $('ad-current').textContent=context()?tr('현재 프로젝트')+': '+(api.getState().workspace?.name||context()):tr('먼저 새 프로젝트를 만들거나 기존 소스를 가져오십시오.');
 }
